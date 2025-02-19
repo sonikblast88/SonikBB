@@ -1,0 +1,382 @@
+body {
+  font-family: sans-serif; /* Изберете подходящ шрифт */
+  line-height: 1.6; /* За по-добра четимост */
+  margin: 20px; /* За да има отстъп от краищата на страницата */
+  background-color: #ACA8A1; /* Пример за фон */
+}
+
+a {
+  color: #0056b3; /* По-тъмно синьо */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#container 
+{
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#header
+{
+    background: #FFF;
+    padding: 20px;
+    border: 1px solid #000; border-bottom: 0px;
+    border-radius: 0px; border-top-left-radius: 5px; border-top-right-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#header img {
+    max-width: 100%; /* Картинката няма да надхвърля ширината на контейнера */
+    height: auto; /* Запазва съотношението на страните */
+    margin: 0 auto; /* Центрира картинката */
+}
+
+#navigation
+{
+    float: left;
+    width: 100%;
+    background: #ACA8A1;
+    border: 0px; border-left: 1px solid black; border-right: 1px solid black;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#navigation ul
+{
+	font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+#navigation ul li
+{
+    list-style-type: none;
+    display: inline;
+}
+
+#navigation li a
+{
+    display: block;
+    float: left;
+    padding: 5px 10px;
+    color: #fff;
+    text-decoration: none;
+    border-right: 1px solid #fff;
+}
+
+#navigation li a:hover { background: #383; }
+
+#content-container
+{
+    border: 1px solid black;border-top: 0px; border-bottom: 0px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    float: left;
+    width: 100%;
+    background: #FFFFFF;	
+}
+
+#content
+{
+    clear: left;
+    float: left;
+    width: 65%;
+    padding: 20px 0;
+    margin: 0 0 0 4%;
+    display: block;
+    min-height: 300px;
+}
+
+#content h2 { margin: 0; }
+
+#aside
+{
+    border: 0px solid black;
+    float: right;
+    width: 25%;
+    padding: 20px 0;
+    margin: 0 3% 0 0;
+    display: block;
+}
+
+#aside h3 { margin: 0; }
+
+#footer
+{
+    clear: left;
+    background: #ccc;
+    text-align: left;
+    padding: 20px;
+
+    border: 1px solid black; border-top: 1px solid #CCCCCC;
+    border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    font-size: small;
+}
+/* THE FORUM PART */
+#forum {
+    background: #F0F0F0;
+    padding: 10px;
+    border: 1px solid black;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    border-radius: 5px;
+}
+#forum-title{
+    margin-left: 50px;
+    border: 0px;
+    /* border-bottom: 1px dashed #ACA8A1; */
+    padding: 5px;
+}
+#forum-title hr{
+    border: 1px dotted #000000;
+    border-style: none none dotted; 
+    color: #fff; 
+    background-color: #fff;
+	margin: 0px;
+	padding: 0px;
+}
+#forum-operations{
+    margin-bottom: 10px;
+    font-size: small;
+}
+#forum-desc{
+    text-align: justify;
+    font-style: italic;
+    font-size: small;
+}
+#forum-picture{
+    margin-right: 6px;
+    float: left;
+}
+#forum-picture img {
+  padding-top: 10px;
+  width: 45px;
+  height: 45px;
+  object-fit: scale-down;
+}
+
+/* THE PROFILE PART */
+#profile{
+    border: 1px solid #CCCCCC;
+    border-top-left-radius: 5px; border-top-right-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+
+#profile-image {
+    max-width: 100%; /* Картинката няма да надхвърля ширината на контейнера */
+    height: auto; /* Запазва съотношението на страните */
+    display: block; /* Премахва ненужното пространство около картинката */
+    margin: 0 auto; /* Центрира картинката */
+}
+
+#profile-info{
+    background: #F0F0F0;
+    margin: 1px;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    font-size: small;
+}
+
+#post-profile-image{
+width: 100px; 
+}
+/* THE LAST TOPICS */
+
+#last-topics{
+    border: 1px solid #CCCCCC;
+    border-top-left-radius: 5px; border-top-right-radius: 5px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+}
+#last-topics-topic-header{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: small;
+}
+#last-topics-topic{
+    background: #F0F0F0;
+    margin: 1px;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+    font-size: small;
+}
+/* LISTING THE TOPICS */
+#list-topics{
+    background: #F0F0F0;
+    margin: 1px;
+    border: 1px solid #CCCCCC;
+    padding: 5px;
+}
+
+/* LISTING THE TOPIC */
+#topic-content
+{
+    clear: left;
+    float: left;
+    width: 65%;
+    padding: 0px 0;
+    margin: 0 0 0 4%;
+    display: inline;
+    min-height: 300px;
+}
+
+#content h2 { margin: 0; }
+
+#topic-aside
+{
+    border: 0px solid black;
+    float: right;
+    width: 25%;
+    padding: 0px 0;
+    margin: 0 3% 0 0;
+    display: inline;
+	height: 150px;
+}
+#topic {
+    background: #F0F0F0;
+    padding: 10px;
+    min-height: 250px;
+    border: 1px solid black;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    border-radius: 5px;
+}
+#topic-title{
+    margin-left: 50px;
+    border: 0px;
+    border-bottom: 1px dashed #ACA8A1;
+    padding: 5px;
+}
+#topic-operations{
+    margin-bottom: 10px;
+    font-size: small;
+}
+#topic-desc {
+    text-align: justify;
+}
+
+#topic-desc img {
+    max-width: 100%;
+    height: auto; /* This ensures the aspect ratio is maintained */
+}
+
+#topic-picture{
+    margin-right: 10px;
+    float: left;
+}
+
+/* --------------------------------------------------------------------------------------- */
+/* Parsedown форматиране */
+
+table {
+  border-collapse: collapse; /* За да се слеят рамките на клетките */
+  width: 100%; /* Или каквато ширина искате */
+}
+
+th, td {
+  border: 1px solid black; /* Или друг цвят и дебелина */
+  padding: 8px; /* Или колкото padding искате */
+  text-align: left; /* Или center, right */
+}
+
+pre {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 15px 0;
+    overflow-x: auto;
+}
+
+pre {
+    position: relative;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #333;
+    display: block;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    line-height: 1.5;
+}
+
+pre code {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+code span {
+    padding: 2px 4px;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* --------------------------------------------------------------------------------------- */
+/* WORKING WITH FORMS */
+
+form {
+  width: 90%; /* Или max-width, ако искате да има ограничение */
+  margin: 20px auto; /* Центриране на формата */
+}
+
+input[type="text"],
+textarea {
+  width: 100%; /* Заема цялата ширина на родителя */
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  border: 1px solid #ccc;
+}
+
+input[type="password"],
+textarea{
+  width: 100%; /* Заема цялата ширина на родителя */
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  border: 1px solid #ccc;
+}
+
+input[type="email"],
+textarea{
+  width: 100%; /* Заема цялата ширина на родителя */
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  border: 1px solid #ccc;
+}
+
+textarea {
+  resize: vertical; /* Позволява промяна на височината на textarea */
+}
+
+input[type="submit"],
+input[type="button"] {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Зелен бутон */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  background-color: #45a049; /* По-тъмно зелено при hover */
+}
