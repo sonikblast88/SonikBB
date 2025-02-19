@@ -41,3 +41,6 @@ If you have any questions or suggestions, you can contact me through GitHub.
 ## Acknowledgements
 
 Thank you to everyone who contributed to the development of SonikBB!
+
+## Site of the project
+https://sonikbb.eu/
