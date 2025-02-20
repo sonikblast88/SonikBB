@@ -14,12 +14,11 @@ SonikBB is a lightweight and fast forum written in PHP. It is designed to be eas
 
 ## Installation
 
-1.  Clone the repository: `git clone https://github.com/sonikblast88/SonikBB.git`
-2.  Create a database named `myforum`.
-3.  Import the database structure from the `database.sql` file into the created database.
-4.  Open the `config.php` file and enter the database connection details.
-5.  Upload the files to the server.
-6.  Open the `install.php` page in the browser and follow the instructions. // work in progress
+1.  Create a database named `sonikbb` or something else.
+2.  Import the database structure from the `database.sql` file into the created database from the /install/ directory.
+3.  Open the `config.php` file and enter the database connection details.
+4.  Upload the files to the server.
+5.  Create a new user via the register.php , go to phpmyadmin, users and change type to 2 to become a administrator.
 
 ## Requirements
 
