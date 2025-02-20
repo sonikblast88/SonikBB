@@ -5,21 +5,21 @@ if (filter_input(INPUT_GET, 'topic_id') > 0) {
     $params = [":topic_id" => $topic_id];
     $stmt = run_q($sql, $params);
 
-    if ($stmt) { // Проверка за успешен резултат от заявката
+    if ($stmt) { // Check for successful query result
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $del = '';
             $user_type = '';
             $ed = '';
 
             if ($row['type'] == 1) {
-                $user_type = 'Потребител';
+                $user_type = 'User';
             } elseif ($row['type'] == 2) {
-                $user_type = 'Администратор';
+                $user_type = 'Administrator';
             }
 
             if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $row['comment_author'] || $_SESSION['user_info']['type'] == 2)) {
-                $del = '<div id = "profile-info">[ <a href="operations/del_comment.php?comment_id=' . $row['comment_id'] . '&cat_id=' . $cat_id . '&topic_id=' . $topic_id . '" onclick="return confirm(\'Are you sure you want to delete this comment?\')">Изтрии Коментар</a> ]</div>';
-                $ed = '<div id = "profile-info">[ <a href="operations/edit_comment.php?comment_id=' . $row['comment_id'] . '&cat_id=' . $cat_id . '&topic_id=' . $topic_id . '">Редактирай Коментар</a> ]</div>';
+                $del = '<div id = "profile-info">[ <a href="operations/del_comment.php?comment_id=' . $row['comment_id'] . '&cat_id=' . $cat_id . '&topic_id=' . $topic_id . '" onclick="return confirm(\'Are you sure you want to delete this comment?\')">Delete Comment</a> ]</div>';
+                $ed = '<div id = "profile-info">[ <a href="operations/edit_comment.php?comment_id=' . $row['comment_id'] . '&cat_id=' . $cat_id . '&topic_id=' . $topic_id . '">Edit Comment</a> ]</div>';
             }
 
             $markdownText = $row['comment'];
@@ -29,7 +29,7 @@ if (filter_input(INPUT_GET, 'topic_id') > 0) {
             // PROFILE PART START
             echo '<div style="width: 99%; border: 1px solid black; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;box-shadow: 0 0 8px rgba(0, 0, 0, .8);border-radius: 5px; margin-top:20px; margin-bottom: 20px;">';
             echo '<div style="display: flex; align-items: center;">';
-            echo '<img src="' . $path . $row['avatar'] . '" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />'; // Ограничаване на размера на аватара
+            echo '<img src="' . $path . $row['avatar'] . '" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />'; // Limit avatar size
             echo '<div>';
             echo '<div>Username: ' . htmlspecialchars($row['username'], ENT_QUOTES) . '</div>'; // Escape username
             echo '<div>Type: ' . $user_type . '</div>';
@@ -43,7 +43,7 @@ if (filter_input(INPUT_GET, 'topic_id') > 0) {
             echo '</div>';
             // PROFILE PART END
 
-            echo $htmlText; // Няма нужда от htmlspecialchars, защото Parsedown вече го прави
+            echo $htmlText; // No need for htmlspecialchars, Parsedown already does it
             echo '</div>';
 
             if (isset($_SESSION['is_loged'])) {
@@ -53,7 +53,7 @@ if (filter_input(INPUT_GET, 'topic_id') > 0) {
             }
         }
     } else {
-        echo "Грешка при изпълнение на заявката."; // Обработка на грешката
+        echo "Error executing the query."; // Error handling
     }
 } else {
     redirect('index.php');

@@ -44,7 +44,7 @@ if ($cat_id > 0) {
                     }
 
                     $move_form .= '</select>';
-                    $move_form .= '<button type="submit">Премести</button>';
+                    $move_form .= '<button type="submit">Move</button>'; // Translate button
                     $move_form .= '</form>';
                 } else {
                     $move_form = ''; // Empty if no rights
@@ -61,14 +61,14 @@ if ($cat_id > 0) {
         if (isset($_SESSION['is_loged'])) {
             echo '<br/><center><a href="operations/add_topic.php?cat_id=' . $cat_id . '"><img src="template/images/add-topic.png" alt="" /></a></center>';
         } else {
-            echo '<center>you have to be <a href="login.php">Logged In</a> to create a topic</center>';
+            echo '<center>You have to be <a href="login.php">Logged In</a> to create a topic</center>'; // Small "t" in "topic"
         }
 
     } else {
-        echo "Грешка при изпълнение на заявката.";
+        echo "Error executing the query.";
     }
 } else {
-    echo 'you have selected a list of topics with no category id';
+    echo 'You have selected a list of topics with no category id'; // Capital "Y"
 }
 
 echo '</div>';

@@ -15,13 +15,13 @@ if ($topic_id > 0) {
 
     if ($stmt) {
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $user_type = ($row['type'] == 1) ? 'Потребител' : (($row['type'] == 2) ? 'Администратор' : '');
+            $user_type = ($row['type'] == 1) ? 'User' : (($row['type'] == 2) ? 'Administrator' : '');
 
             $del1 = '';
             $ed1 = '';
             if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $row['topic_author'] || $_SESSION['user_info']['type'] == 2)) {
-                $del1 = '<div id = "profile-info">[ <a href="operations/del_topic.php?topic_id=' . $row['topic_id'] . '&cat_id=' . $cat_id . '" onclick="return confirm(\'Are you sure you want to delete this topic?\')">Изтрии</a> ]</div>';
-                $ed1 = '<div id = "profile-info">[ <a href="operations/edit_topic.php?topic_id=' . $topic_id . '&cat_id=' . $cat_id . '">Редактирай</a> ]</div>';
+                $del1 = '<div id = "profile-info">[ <a href="operations/del_topic.php?topic_id=' . $row['topic_id'] . '&cat_id=' . $cat_id . '" onclick="return confirm(\'Are you sure you want to delete this topic?\')">Delete</a> ]</div>';
+                $ed1 = '<div id = "profile-info">[ <a href="operations/edit_topic.php?topic_id=' . $topic_id . '&cat_id=' . $cat_id . '">Edit</a> ]</div>';
             }
 
             $markdownText = $row['topic_desc'];
@@ -33,7 +33,7 @@ if ($topic_id > 0) {
             // PROFILE PART START
             echo '<div style="width: 99%; border: 1px solid black; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;box-shadow: 0 0 8px rgba(0, 0, 0, .8);border-radius: 5px;">';
             echo '<div style="display: flex; align-items: center;">';
-            echo '<img src="' . $path . $row['avatar'] . '" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />'; // Ограничаване на размера на аватара
+            echo '<img src="' . $path . $row['avatar'] . '" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />'; // Limit avatar size
             echo '<div>';
             echo '<div>Username: ' . htmlspecialchars($row['username'], ENT_QUOTES) . '</div>';
             echo '<div>Type: ' . $user_type . '</div>';
@@ -57,7 +57,7 @@ if ($topic_id > 0) {
             }
         }
     } else {
-        echo "Грешка при изпълнение на заявката.";
+        echo "Error executing the query.";
     }
 }
 

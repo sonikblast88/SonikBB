@@ -2,35 +2,35 @@
 include 'functions.php';
 
 if ($_SESSION['is_loged'] == true) {
-    $uploadDir = 'uploads/'; // Папка за качените файлове
+    $uploadDir = 'uploads/'; // Directory for uploaded files
 
     if (!empty($_FILES['imageUpload'])) {
         $file = $_FILES['imageUpload'];
         $fileName = basename($file['name']);
-        $randomName = md5(uniqid()) . "." . pathinfo($fileName, PATHINFO_EXTENSION); // Генериране на случайно име
+        $randomName = md5(uniqid()) . "." . pathinfo($fileName, PATHINFO_EXTENSION); // Generate random name
         $filePath = $uploadDir . $randomName;
 
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']; // Позволени файлови типове
+        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']; // Allowed file types
         $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
         if (in_array($fileType, $allowedTypes)) {
             if (move_uploaded_file($file['tmp_name'], $filePath)) {
-                // Актуализиране на аватара в базата данни
+                // Update avatar in the database
                 $profile_id = (int)$_POST['profile_id'];
-                $filePath = '/' . $filePath; // Пътят към файла
+                $filePath = $filePath; // The path to the file
 
                 run_q('UPDATE users SET avatar="' . $filePath . '" WHERE user_id="' . $profile_id . '"');
-                echo $filePath; // Връщане на пътя към файла за AJAX
+                echo $filePath; // Return the file path for AJAX
             } else {
-                echo "Грешка при качване на файл. Проверете правата за достъп до директорията.";
+                echo "Error uploading file. Check directory permissions."; // Translated message
             }
         } else {
-            echo "Невалиден тип файл. Позволени типове: " . implode(", ", $allowedTypes);
+            echo "Invalid file type. Allowed types: " . implode(", ", $allowedTypes); // Translated message
         }
     } else {
-        echo "Не е качен файл.";
+        echo "No file uploaded."; // Translated message
     }
 } else {
-    redirect('index.php');
+    redirect('../index.php');
 }
 ?>

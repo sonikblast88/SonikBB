@@ -27,13 +27,13 @@ if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $get_p
                     if ($update_stmt) {
                         redirect('index.php');
                     } else {
-                        echo "Грешка при обновяване на паролата.";
+                        echo "Error updating password."; // Translated
                     }
                 } else {
-                    echo "Новите пароли не съвпадат.";
+                    echo "New passwords do not match."; // Translated
                 }
             } else {
-                echo "Грешна стара парола.";
+                echo "Incorrect old password."; // Translated
             }
         }
 
@@ -42,42 +42,41 @@ if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $get_p
             if ($update_signature_stmt) {
                 redirect('index.php');
             } else {
-                echo "Грешка при обновяване на подписа.";
+                echo "Error updating signature."; // Translated
             }
         }
 
         include 'template/header.php';
         echo '<div id="content">';
-        echo 'Здравейте <b>' . htmlspecialchars($row['username'], ENT_QUOTES) . '</b>. Тук ще може да редактирате своя профил. Потребителското име не може да бъде променяно.';
+        echo 'Hello <b>' . htmlspecialchars($row['username'], ENT_QUOTES) . '</b>. Here you can edit your profile. The username cannot be changed.'; // Translated
 
         echo '
-        <br><br><b>Промяна на парола:</b><hr>
+        <br><br><b>Change Password:</b><hr>
         <form action="profile.php?profile_id=' . $get_profile_id . '" method="post">
-            Стара парола: <input type="password" name="old_password"><br />
-            Нова парола: <input type="password" name="new_password"><br />
-            Повтори парола: <input type="password" name="match_password"><br />
+            Old Password: <input type="password" name="old_password"><br />
+            New Password: <input type="password" name="new_password"><br />
+            Repeat Password: <input type="password" name="match_password"><br />
             <input type="hidden" name="form_submit" value="1">
             <input type="hidden" name="post_profile_id" value="' . $get_profile_id . '">
-            <input type="submit" value="Промени паролата си">
-        </form>
+            <input type="submit" value="Change your password">  </form>
         ';
 
         echo '
-        <b>Подпис:</b><hr>
+        <b>Signature:</b><hr>
         <form action="profile.php?profile_id=' . $get_profile_id . '" method="post">
             <textarea name="signature" rows="10" cols="85">' . htmlspecialchars($row['signature'], ENT_QUOTES) . '</textarea>
             <input type="hidden" name="submit_signature" value="1">
             <input type="hidden" name="post_profile_id" value="' . $get_profile_id . '">
-            <input type="submit" value="Подпис">
+            <input type="submit" value="Signature">
         </form>
         ';
 
         echo '
-        <b>Смяна на аватар:</b><hr>
+        <b>Change Avatar:</b><hr>
         <form id="avatarForm" action="upload-avatar.php?profile_id=' . $get_profile_id . '" method="post" enctype="multipart/form-data">
             <input type="file" name="imageUpload" accept="image/*" required><br />
             <input type="hidden" name="profile_id" value="' . $get_profile_id . '">
-            <input type="submit" value="Качи аватар">
+            <input type="submit" value="Upload Avatar">
         </form>
         ';
 
@@ -93,15 +92,11 @@ if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $get_p
                 })
                 .then(response => response.text())
                 .then(data => {
-                    if (data.startsWith("/")) {
-                        alert("Аватарът беше успешно качен!");
-                        location.reload();
-                    } else {
-                        alert(data);
-                    }
+                    alert("Avatar uploaded successfully!"); // Translated
+                    location.reload();
                 })
                 .catch(error => {
-                    console.error("Грешка при качване на файл:", error);
+                    console.error("Error uploading file:", error); // Translated
                 });
             });
         </script>
@@ -111,7 +106,7 @@ if (isset($_SESSION['is_loged']) && ($_SESSION['user_info']['user_id'] == $get_p
         include 'template/footer.php';
 
     } else {
-        echo "Потребителят не е намерен.";
+        echo "User not found."; // Translated
         exit;
     }
 

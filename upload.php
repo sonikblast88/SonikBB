@@ -1,4 +1,5 @@
 <?php
+
 include 'functions.php';
 
 if (isset($_SESSION['is_loged']) && $_SESSION['is_loged'] == true) {
@@ -6,7 +7,7 @@ if (isset($_SESSION['is_loged']) && $_SESSION['is_loged'] == true) {
 
     // Check if the directory exists and is writable
     if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
-        echo "Грешка: Директорията за качване не съществува или няма права за запис.";
+        echo "Error: Upload directory does not exist or is not writable."; // Translated
         exit; // Stop execution to prevent further errors
     }
 
@@ -30,7 +31,7 @@ if (isset($_SESSION['is_loged']) && $_SESSION['is_loged'] == true) {
         // Validate file size (add this!)
         $maxFileSize = 5 * 1024 * 1024; // 5MB (adjust as needed)
         if ($file['size'] > $maxFileSize) {
-            echo "Размерът на файла надвишава максимално позволения размер от " . ($maxFileSize / (1024 * 1024)) . "MB.";
+            echo "The file size exceeds the maximum allowed size of " . ($maxFileSize / (1024 * 1024)) . "MB."; // Translated
             exit;
         }
 
@@ -41,17 +42,17 @@ if (isset($_SESSION['is_loged']) && $_SESSION['is_loged'] == true) {
             } else {
                 // More specific error handling
                 $error = error_get_last();
-                echo "Грешка при качване на файл: " . (isset($error['message']) ? $error['message'] : "Неизвестна грешка.");
+                echo "Error uploading file: " . (isset($error['message']) ? $error['message'] : "Unknown error."); // Translated
             }
         } else {
-            echo "Невалиден тип файл. Позволени типове: " . implode(", ", $allowedTypes);
+            echo "Invalid file type. Allowed types: " . implode(", ", $allowedTypes); // Translated
         }
     } else {
-        echo "Не е качен файл.";
+        echo "No file uploaded."; // Translated
     }
 } else {
     // Redirect or display an error message
-    echo "Нямате достъп до тази страница."; // Or redirect('index.php');
+    echo "You do not have access to this page."; // Translated or redirect('index.php');
     exit;
 }
 ?>

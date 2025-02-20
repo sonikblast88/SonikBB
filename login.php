@@ -31,28 +31,27 @@ if ($form_submit == 1) {
             if ($update_result) {
                 redirect('index.php');
             } else {
-                echo "Грешка при актуализиране на last_login.";
+                echo "Error updating last_login."; // Translated message
             }
         } else {
-            echo 'Грешно потребителско име или парола.';
+            echo 'Incorrect username or password.'; // Translated message
         }
     } else {
-        echo "Грешка при изпълнение на заявката.";
+        echo "Error executing the query."; // Translated message
     }
 }
 ?>
 
 <center>
     <form action="login.php" method="post">
-        <label for="username">Потребител:</label> <input type="text" id="username" name="username" placeholder="Въведете потребителско име" required><br/>
-        <label for="password">Парола:</label> <input type="password" id="password" name="password" placeholder="Въведете парола" required><br/>
+        <label for="username">Username:</label> <input type="text" id="username" name="username" placeholder="Enter username" required><br/>
+        <label for="password">Password:</label> <input type="password" id="password" name="password" placeholder="Enter password" required><br/>
         <input type="hidden" name="form_submit" value="1">
-        <input type="submit" value="Вписване в системата">
-    </form>
+        <input type="submit" value="Log in">  </form>
 </center>
 
 <?php
-echo '</div>'; // Затварям id=content
+echo '</div>'; // Close id=content
 include 'aside.php';
 include 'template/footer.php';
 ?>

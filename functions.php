@@ -1,14 +1,14 @@
 <?php
 
-require_once 'config.php'; // Включваме config.php, за да имаме достъп до константите
+require_once 'config.php'; // Include config.php to access the constants
 
-ini_set( 'session.cookie_httponly', 1 ); // Защита на бисквитките на сесията
-session_start(); // Стартираме сесията
+ini_set( 'session.cookie_httponly', 1 ); // Protect session cookies
+session_start(); // Start the session
 
-include 'run_q.php'; // Включваме функцията за работа с базата данни
-include 'functions/redirect.php'; // Включваме функцията за пренасочване
-include 'functions/Parsedown.php'; // Включваме библиотеката Parsedown за Markdown
+include 'run_q.php'; // Include the database function
+include 'functions/redirect.php'; // Include the redirect function
+include 'functions/Parsedown.php'; // Include the Parsedown library for Markdown
 
-// Други функции (ако има такива)
+// Other functions (if any)
 
 ?>
