@@ -8,7 +8,7 @@ $db_name = '';
 $path = './';
 $site_title = 'My Forum';
 $website = "http://yourwebsite.com";
-$site_version = "0.0.20 Dev";
+$site_version = "0.0.21 Dev";
 $excluded_files = "'.htaccess', 'config.php', 'README.md', 'скрит_файл.zip', 'index.php', 'download_counts.txt'";
 
 $errors = [];
