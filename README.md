@@ -1,4 +1,5 @@
 # SonikBB
+# My main idea is that every new programmer can understand and contribute to the forum or just play and lear new things for himself.
 
 SonikBB is a lightweight and fast forum written in PHP. It is designed to be easy to use and configure, while providing all the necessary features for a modern forum.
 
