@@ -2,22 +2,6 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `myforum`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
-
 CREATE TABLE `categories` (
   `cat_id` int(11) NOT NULL,
   `position` int(11) NOT NULL,
@@ -154,6 +138,11 @@ ALTER TABLE `visitors`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+INSERT INTO `categories` (`position`, `cat_name`, `cat_desc`)
+VALUES (1, 'Your first category', 'With a simple description text');
+
+INSERT INTO `topics` (`parent`, `topic_name`, `topic_desc`, `topic_author`)
+VALUES (1, 'The firs topic of this forum', 'just a simple topic description', 1); -- the id of the admin 1
+
+INSERT INTO `comments` (`topic_id`, `comment`, `comment_author`)
+VALUES (1, 'Hello dear visitor', 1); -- Заменете 1 с ID на създадения администратор и ID на създадения форум
