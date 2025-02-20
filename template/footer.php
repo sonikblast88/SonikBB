@@ -1,4 +1,6 @@
-</div> <div id="footer">
+</div>
+
+<div id="footer">
 
 <?php
 // STATS
@@ -15,7 +17,6 @@ if ($result) { // Проверка за успешен резултат
 } else {
     echo "Грешка при извличане на статистика."; // Обработка на грешка
 }
-
 
 $date = date('c', time() - 24 * 60 * 60); // Last 24 Hours
 $sql_active_users = "SELECT username, type FROM users WHERE last_login > :date";
@@ -34,7 +35,6 @@ if ($active_users) { // Проверка за успешен резултат
 } else {
     echo "Грешка при извличане на активни потребители."; // Обработка на грешка
 }
-
 
 // USER STATISTICS
 // -----------------------------------------------------------------------
@@ -64,7 +64,7 @@ if (isset($_SESSION['is_loged']) && $_SESSION['user_info']['type'] == 2) {
 }
 ?>
 
-<br /><hr /><center>SonikBB Version 0.0.18 Dev</center>
+<hr style="border: 0px;border-top: dotted 1px;"><center>SonikBB Version 0.0.20 Dev</center>
 </div>
 
 </body>

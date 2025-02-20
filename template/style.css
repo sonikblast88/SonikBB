@@ -1,65 +1,62 @@
 body {
-  font-family: sans-serif; /* Изберете подходящ шрифт */
-  line-height: 1.6; /* За по-добра четимост */
-  margin: 20px; /* За да има отстъп от краищата на страницата */
-  background-color: #ACA8A1; /* Пример за фон */
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #ACA8A1;
 }
 
 a {
-  color: #0056b3; /* По-тъмно синьо */
-  text-decoration: none;
+    color: #0056b3;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-#container 
-{
+#container {
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-#header
-{
+#header {
     background: #FFF;
     padding: 20px;
-    border: 1px solid #000; border-bottom: 0px;
-    border-radius: 0px; border-top-left-radius: 5px; border-top-right-radius: 5px;
+    border: 1px solid #000;
+    border-bottom: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
 
 #header img {
-    max-width: 100%; /* Картинката няма да надхвърля ширината на контейнера */
-    height: auto; /* Запазва съотношението на страните */
-    margin: 0 auto; /* Центрира картинката */
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
 }
 
-#navigation
-{
+#navigation {
     float: left;
     width: 100%;
     background: #ACA8A1;
-    border: 0px; border-left: 1px solid black; border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
 
-#navigation ul
-{
-	font-weight: bold;
+#navigation ul {
+    font-weight: bold;
     margin: 0;
     padding: 0;
 }
 
-#navigation ul li
-{
+#navigation ul li {
     list-style-type: none;
     display: inline;
 }
 
-#navigation li a
-{
+#navigation li a {
     display: block;
     float: left;
     padding: 5px 10px;
@@ -68,19 +65,21 @@ a:hover {
     border-right: 1px solid #fff;
 }
 
-#navigation li a:hover { background: #383; }
+#navigation li a:hover {
+    background: #383;
+}
 
-#content-container
-{
-    border: 1px solid black;border-top: 0px; border-bottom: 0px;
+#content-container { /* Оставен е content-container */
+    border: 1px solid black;
+    border-top: 0px;
+    border-bottom: 0px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
     float: left;
     width: 100%;
-    background: #FFFFFF;	
+    background: #FFFFFF;
 }
 
-#content
-{
+#content {
     clear: left;
     float: left;
     width: 65%;
@@ -90,11 +89,11 @@ a:hover {
     min-height: 300px;
 }
 
-#content h2 { margin: 0; }
+#content h2 {
+    margin: 0;
+}
 
-#aside
-{
-    border: 0px solid black;
+#aside {
     float: right;
     width: 25%;
     padding: 20px 0;
@@ -102,20 +101,23 @@ a:hover {
     display: block;
 }
 
-#aside h3 { margin: 0; }
+#aside h3 {
+    margin: 0;
+}
 
-#footer
-{
+#footer {
     clear: left;
     background: #ccc;
     text-align: left;
     padding: 20px;
-
-    border: 1px solid black; border-top: 1px solid #CCCCCC;
-    border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;
+    border: 1px solid black;
+    border-top: 1px solid #CCCCCC;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
     font-size: small;
 }
+
 /* THE FORUM PART */
 #forum {
     background: #F0F0F0;
@@ -124,55 +126,52 @@ a:hover {
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
     border-radius: 5px;
 }
-#forum-title{
+
+#forum-title {
     margin-left: 50px;
-    border: 0px;
-    /* border-bottom: 1px dashed #ACA8A1; */
+    border-bottom: 1px dotted #000000;
     padding: 5px;
 }
-#forum-title hr{
-    border: 1px dotted #000000;
-    border-style: none none dotted; 
-    color: #fff; 
-    background-color: #fff;
-	margin: 0px;
-	padding: 0px;
-}
-#forum-operations{
+
+#forum-operations {
     margin-bottom: 10px;
     font-size: small;
 }
-#forum-desc{
+
+#forum-desc {
     text-align: justify;
     font-style: italic;
     font-size: small;
 }
-#forum-picture{
+
+#forum-picture {
     margin-right: 6px;
     float: left;
 }
+
 #forum-picture img {
-  padding-top: 10px;
-  width: 45px;
-  height: 45px;
-  object-fit: scale-down;
+    padding-top: 10px;
+    width: 45px;
+    height: 45px;
+    object-fit: scale-down;
 }
 
 /* THE PROFILE PART */
-#profile{
+#profile {
     border: 1px solid #CCCCCC;
-    border-top-left-radius: 5px; border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
 
 #profile-image {
-    max-width: 100%; /* Картинката няма да надхвърля ширината на контейнера */
-    height: auto; /* Запазва съотношението на страните */
-    display: block; /* Премахва ненужното пространство около картинката */
-    margin: 0 auto; /* Центрира картинката */
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
-#profile-info{
+#profile-info {
     background: #F0F0F0;
     margin: 1px;
     border: 1px solid #CCCCCC;
@@ -180,32 +179,34 @@ a:hover {
     font-size: small;
 }
 
-#post-profile-image{
-width: 100px; 
+#post-profile-image {
+    width: 100px;
 }
-/* THE LAST TOPICS */
 
-#last-topics{
+/* THE LAST TOPICS */
+#last-topics {
     border: 1px solid #CCCCCC;
-    border-top-left-radius: 5px; border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 }
-#last-topics-topic-header{
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
+
+#last-topics-topic-header {
+    padding: 10px;
     font-weight: bold;
     font-size: small;
 }
-#last-topics-topic{
+
+#last-topics-topic {
     background: #F0F0F0;
     margin: 1px;
     border: 1px solid #CCCCCC;
     padding: 5px;
     font-size: small;
 }
+
 /* LISTING THE TOPICS */
-#list-topics{
+#list-topics {
     background: #F0F0F0;
     margin: 1px;
     border: 1px solid #CCCCCC;
@@ -213,29 +214,6 @@ width: 100px;
 }
 
 /* LISTING THE TOPIC */
-#topic-content
-{
-    clear: left;
-    float: left;
-    width: 65%;
-    padding: 0px 0;
-    margin: 0 0 0 4%;
-    display: inline;
-    min-height: 300px;
-}
-
-#content h2 { margin: 0; }
-
-#topic-aside
-{
-    border: 0px solid black;
-    float: right;
-    width: 25%;
-    padding: 0px 0;
-    margin: 0 3% 0 0;
-    display: inline;
-	height: 150px;
-}
 #topic {
     background: #F0F0F0;
     padding: 10px;
@@ -244,42 +222,20 @@ width: 100px;
     box-shadow: 0 0 8px rgba(0, 0, 0, .8);
     border-radius: 5px;
 }
-#topic-title{
-    margin-left: 50px;
-    border: 0px;
-    border-bottom: 1px dashed #ACA8A1;
-    padding: 5px;
-}
-#topic-operations{
-    margin-bottom: 10px;
-    font-size: small;
-}
-#topic-desc {
-    text-align: justify;
-}
-
-#topic-desc img {
-    max-width: 100%;
-    height: auto; /* This ensures the aspect ratio is maintained */
-}
-
-#topic-picture{
-    margin-right: 10px;
-    float: left;
-}
 
 /* --------------------------------------------------------------------------------------- */
 /* Parsedown форматиране */
 
 table {
-  border-collapse: collapse; /* За да се слеят рамките на клетките */
-  width: 100%; /* Или каквато ширина искате */
+    border-collapse: collapse;
+    width: 100%;
 }
 
-th, td {
-  border: 1px solid black; /* Или друг цвят и дебелина */
-  padding: 8px; /* Или колкото padding искате */
-  text-align: left; /* Или center, right */
+th,
+td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
 }
 
 pre {
@@ -289,9 +245,6 @@ pre {
     border-radius: 5px;
     margin: 15px 0;
     overflow-x: auto;
-}
-
-pre {
     position: relative;
 }
 
@@ -323,9 +276,9 @@ code span {
 }
 
 img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 /* --------------------------------------------------------------------------------------- */
