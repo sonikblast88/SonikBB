@@ -16,7 +16,6 @@ if (isset($_SESSION['is_loged'])) {
     echo '<img src="' . $path . $_SESSION['user_info']['avatar'] . '" alt="" id="profile-image" />';
     echo '<div id="profile-info"><b>Име:</b> ' . htmlspecialchars($_SESSION['user_info']['username'], ENT_QUOTES) . '</div>';
     echo '<div id="profile-info"><b>Тип:</b> ' . $type . '</div>';
-    echo '<div id="profile-info"><b>Съобщения:</b> 0 непрочетени</div>';
     echo $stats;
     echo '<div id="profile-info"><b>» <a href="' . $path . 'profile.php?profile_id=' . (int)$_SESSION['user_info']['user_id'] . '">Редакция на профил</a></b></div>';
     echo '<div id="profile-info"><b>» <a href="' . $path . 'logout.php">Изход от системата</a></b></div>';

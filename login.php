@@ -8,31 +8,31 @@ $password = filter_input(INPUT_POST, 'password');
 $form_submit = filter_input(INPUT_POST, 'form_submit');
 
 if ($form_submit == 1) {
-    // Използваме prepared statement за защита от SQL инжекции
-    $sql = "SELECT user_id, username, password, type, avatar, signature FROM users WHERE username = :username AND password = :password";
+    $sql = "SELECT user_id, username, password, type, avatar, signature FROM users WHERE username = :username";
     $params = [
-        ":username" => $username,
-        ":password" => $password // !!! ПАРОЛАТА СЕ ПРЕДАВА В ЧИСТ ТЕКСТ !!!
+        ":username" => $username
     ];
     $stmt = run_q($sql, $params);
 
     if ($stmt) {
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Проверяваме дали потребителят е намерен
-        if ($row) {
+        if ($row && password_verify($password, $row['password'])) {
             $_SESSION['is_loged'] = true;
             $_SESSION['user_info'] = $row;
 
-            // Актуализираме last_login (с prepared statement)
             $update_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
             $update_params = [
                 ":last_login" => date('Y-m-d H:i:s'),
                 ":user_id" => $_SESSION['user_info']['user_id']
             ];
-            run_q($update_sql, $update_params);
+            $update_result = run_q($update_sql, $update_params);
 
-            redirect('index.php');
+            if ($update_result) {
+                redirect('index.php');
+            } else {
+                echo "Грешка при актуализиране на last_login.";
+            }
         } else {
             echo 'Грешно потребителско име или парола.';
         }

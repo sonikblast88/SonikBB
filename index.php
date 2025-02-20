@@ -35,7 +35,7 @@ if ($query) {
 
         echo '<div id="forum">
                 <div id="forum-picture"><img src="template/' . $row['def_icon'] . '" alt="" id="forum-picture" /></div>
-                <div id="forum-title"><b>» <a href="topics.php?cat_id=' . (int)$row['cat_id'] . '">' . htmlspecialchars($row['cat_name'], ENT_QUOTES) . '</a></b><hr /></div>
+                <div id="forum-title"><b>» <a href="topics.php?cat_id=' . (int)$row['cat_id'] . '">' . htmlspecialchars($row['cat_name'], ENT_QUOTES) . '</a></b></div>
                 <div id="forum-operations">&nbsp;' . $delete . ' ' . $edit . ' ' . $up . ' ' . $down . '<div style="float: right;">Общо Теми ( <b>' . (int)$broi_temi_result['broi_temi'] . '</b> ) Общо коментари ( <b>' . (int)$broi_komentari_result['broi_komentari'] . '</b> )</div></div>
                 <div id="forum-desc">' . htmlspecialchars($row['cat_desc'], ENT_QUOTES) . '</div>
             </div><br />';
