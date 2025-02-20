@@ -69,7 +69,7 @@ a:hover {
     background: #383;
 }
 
-#content-container { /* Оставен е content-container */
+#content-container {
     border: 1px solid black;
     border-top: 0px;
     border-bottom: 0px;
@@ -224,7 +224,7 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------------------- */
-/* Parsedown форматиране */
+/* Parsedown formatting */
 
 table {
     border-collapse: collapse;
@@ -285,45 +285,45 @@ img {
 /* WORKING WITH FORMS */
 
 form {
-  width: 90%; /* Или max-width, ако искате да има ограничение */
-  margin: 20px auto; /* Центриране на формата */
+  width: 90%; /* Or max-width if you want a limit */
+  margin: 20px auto; /* Center the form */
 }
 
 input[type="text"],
 textarea {
-  width: 100%; /* Заема цялата ширина на родителя */
+  width: 100%; /* Take up the full width of the parent */
   padding: 10px;
   margin-bottom: 10px;
-  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  box-sizing: border-box; /* Include padding and border in the total width */
   border: 1px solid #ccc;
 }
 
 input[type="password"],
-textarea{
-  width: 100%; /* Заема цялата ширина на родителя */
+textarea {
+  width: 100%; /* Take up the full width of the parent */
   padding: 10px;
   margin-bottom: 10px;
-  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  box-sizing: border-box; /* Include padding and border in the total width */
   border: 1px solid #ccc;
 }
 
 input[type="email"],
-textarea{
-  width: 100%; /* Заема цялата ширина на родителя */
+textarea {
+  width: 100%; /* Take up the full width of the parent */
   padding: 10px;
   margin-bottom: 10px;
-  box-sizing: border-box; /* Включва padding и border в общата ширина */
+  box-sizing: border-box; /* Include padding and border in the total width */
   border: 1px solid #ccc;
 }
 
 textarea {
-  resize: vertical; /* Позволява промяна на височината на textarea */
+  resize: vertical; /* Allow resizing the height of the textarea */
 }
 
 input[type="submit"],
 input[type="button"] {
   padding: 10px 20px;
-  background-color: #4CAF50; /* Зелен бутон */
+  background-color: #4CAF50; /* Green button */
   color: white;
   border: none;
   cursor: pointer;
@@ -331,5 +331,6 @@ input[type="button"] {
 
 input[type="submit"]:hover,
 input[type="button"]:hover {
-  background-color: #45a049; /* По-тъмно зелено при hover */
+  background-color: #45a049; /* Darker green on hover */
+}
 }

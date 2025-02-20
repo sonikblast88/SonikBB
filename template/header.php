@@ -13,9 +13,6 @@
     </div>
     <div id="navigation">
         <ul>
-            <li><a href="<?php echo WEBSITE; ?>/index.php">НАЧАЛО</a></li>
-            <li><a href="<?php echo WEBSITE; ?>/#">ЗА ПРОЕКТА</a></li>
-            <li><a href="<?php echo WEBSITE; ?>/downloads.php">ИЗТЕГЛЯНИЯ</a></li>
-        </ul>
+            <li><a href="<?php echo WEBSITE; ?>/index.php">Home</a></li> <li><a href="<?php echo WEBSITE; ?>/#">About</a></li> <li><a href="<?php echo WEBSITE; ?>/downloads.php">Downloads</a></li> </ul>
     </div>
     <div id="content-container">
