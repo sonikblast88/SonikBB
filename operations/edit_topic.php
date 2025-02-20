@@ -1,29 +1,30 @@
 <?php
 include '../functions.php';
 
-if (isset($_SESSION['is_loged'])) {
+if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SESSION['user_info']['type']) && ($_SESSION['user_info']['type'] == 1 || $_SESSION['user_info']['type'] == 2)){
     $topic_id = (int)filter_input(INPUT_GET, 'topic_id');
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
 
     if ($topic_id > 0) {
-        // Извличане на данните за темата (с prepared statement)
-        $sql_select = "SELECT topic_name, topic_desc FROM topics WHERE topic_id = :topic_id";
+        // Fetch topic data (using prepared statement)
+        $sql_select = "SELECT topic_name, topic_desc, topic_author FROM topics WHERE topic_id = :topic_id";
         $params_select = [":topic_id" => $topic_id];
         $stmt = run_q($sql_select, $params_select);
 
         if ($stmt && $row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
-            if ($_SESSION['user_info']['type'] == 2 || // Админ винаги може да редактира
-                (isset($_SESSION['user_info']['user_id']) && $_SESSION['user_info']['user_id'] == $row['topic_author'])) { // Авторът на темата също може
+            // Check if user is admin or topic author
+            if ($_SESSION['user_info']['type'] == 2 || 
+                (isset($_SESSION['user_info']['user_id']) && $_SESSION['user_info']['user_id'] == $row['topic_author'])) {
 
                 $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
                 if ($form_submit == 1) {
-                    $topic_name = trim(filter_input(INPUT_POST, 'topic_name')); // Премахнато addslashes()
-                    $topic_desc = trim(filter_input(INPUT_POST, 'topic_desc')); // Премахнато addslashes()
+                    $topic_name = trim(filter_input(INPUT_POST, 'topic_name'));
+                    $topic_desc = trim(filter_input(INPUT_POST, 'topic_desc'));
                     $post_cat_id = (int)filter_input(INPUT_POST, 'post_cat_id');
                     $post_topic_id = (int)filter_input(INPUT_POST, 'post_topic_id');
 
-                    // Актуализация на темата (с prepared statement)
+                    // Update topic (using prepared statement)
                     $sql_update = "UPDATE topics SET topic_name = :topic_name, topic_desc = :topic_desc WHERE topic_id = :post_topic_id";
                     $params_update = [
                         ":topic_name" => $topic_name,
@@ -35,24 +36,24 @@ if (isset($_SESSION['is_loged'])) {
                     if ($result) {
                         redirect('../topic.php?topic_id=' . $post_topic_id . '&cat_id=' . $post_cat_id);
                     } else {
-                        echo "Грешка при редактиране на темата."; // Обработка на грешката
+                        echo "Error updating topic."; // Error handling
                     }
                 }
             } else {
-                echo "Нямате права да редактирате тази тема.";
+                echo "You do not have permission to edit this topic.";
             }
 
         } else {
-            echo "Грешка при извличане на данните за темата.";
+            echo "Error fetching topic data.";
             exit;
         }
     } else {
-        echo "Невалиден topic_id.";
+        echo "Invalid topic_id.";
         exit;
     }
 
 } else {
-    echo "Не сте влезли в системата.";
+    echo "You are not logged in.";
     exit;
 }
 
@@ -60,7 +61,7 @@ include '../template/header.php';
 ?>
 
 <form action="edit_topic.php?topic_id=<?php echo $topic_id; ?>&cat_id=<?php echo $cat_id; ?>" method="POST">
-    <input type="text" name="topic_name" value="<?php echo htmlspecialchars($row['topic_name'], ENT_QUOTES); ?>" size="98" placeholder="Име на темата" required><br />
+    <input type="text" name="topic_name" value="<?php echo htmlspecialchars($row['topic_name'], ENT_QUOTES); ?>" size="98" placeholder="Topic Name" required><br />
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
         <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -89,101 +90,99 @@ include '../template/header.php';
 </form>
 
 <script>
-    function formatText(type) {
+function formatText(type) {
+    const textarea = document.getElementById('topic_desc');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    let formattedText = '';
+    switch (type) {
+        case 'bold':
+            formattedText = `**${selectedText}**`;
+            break;
+        case 'italic':
+            formattedText = `*${selectedText}*`;
+            break;
+        case 'link':
+            const url = prompt("Enter URL:");
+            if (url) {
+                formattedText = `[${selectedText || 'Link Text'}](${url})`;
+            } else {
+                return; // Handle cancel
+            }
+            break;
+        case 'code':
+            formattedText = "```\n" + selectedText + "\n```";
+            break;
+        case 'heading':
+            const level = prompt("Enter heading level (1-6):", "2");
+            if (level && level >= 1 && level <= 6) {
+                formattedText = "#".repeat(level) + " " + selectedText;
+            } else {
+                return; // Handle cancel or invalid input
+            }
+            break;
+        case 'list':
+            formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+            break;
+        case 'quote':
+            formattedText = selectedText.split('\n').map(line => '> ' + line).join('\n');
+            break;
+    }
+
+    textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+    textarea.focus();
+}
+
+function insertImage() {
+    const imageUrl = prompt('Please enter the image URL:'); // Translated prompt
+    if (imageUrl) {
         const textarea = document.getElementById('topic_desc');
         const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const selectedText = textarea.value.substring(start, end);
-
-        let formattedText = '';
-        switch (type) {
-            case 'bold':
-                formattedText = `**${selectedText}**`;
-                break;
-            case 'italic':
-                formattedText = `*${selectedText}*`;
-                break;
-            case 'link':
-                const url = prompt("Enter URL:");
-                if (url) {
-                    formattedText = `[${selectedText || 'Link Text'}](${url})`;
-                } else {
-                    return; // Handle cancel
-                }
-                break;
-            case 'code':
-                formattedText = "```\n" + selectedText + "\n```";
-                break;
-            case 'heading':
-                const level = prompt("Enter heading level (1-6):", "2");
-                if (level && level >= 1 && level <= 6) {
-                    formattedText = "#".repeat(level) + " " + selectedText;
-                } else {
-                    return; // Handle cancel or invalid input
-                }
-                break;
-            case 'list':
-                formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
-                break;
-            case 'quote': //New Case for Quote
-                formattedText = selectedText.split('\n').map(line => '> ' + line).join('\n');
-                break;
-        }
-
-        textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+        const imageTag = `![Image](${imageUrl})`;
+        textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
         textarea.focus();
     }
+}
 
-    function insertImage() {
-        const imageUrl = prompt('Моля, въведете URL на картинката:');
-        if (imageUrl) {
+function openFileUpload() {
+    document.getElementById('fileUploadModal').style.display = 'block';
+}
+
+function closeFileUpload() {
+    document.getElementById('fileUploadModal').style.display = 'none';
+}
+
+function uploadImage() {
+    const fileInput = document.getElementById('imageUpload');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('imageUpload', file);
+
+        fetch('../upload.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(imagePath => {
             const textarea = document.getElementById('topic_desc');
             const start = textarea.selectionStart;
-            const imageTag = `![Image](${imageUrl})`;
+            const imageTag = `![Image](${imagePath})`;
             textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
             textarea.focus();
-        }
+            closeFileUpload();
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error); // Translated error message
+            alert('An error occurred during upload.'); // Translated alert
+        });
+    } else {
+        alert('Please select an image to upload.'); // Translated alert
     }
-
-// тази част е за качването на снимки, ползва ../upload.php и ги качва в папка uploads	
-    function openFileUpload() {
-        document.getElementById('fileUploadModal').style.display = 'block';
-    }
-
-    function closeFileUpload() {
-        document.getElementById('fileUploadModal').style.display = 'none';
-    }
-
-	function uploadImage() {
-		const fileInput = document.getElementById('imageUpload');
-		const file = fileInput.files[0];
-
-		if (file) {
-			const formData = new FormData();
-			formData.append('imageUpload', file);
-
-			fetch('../upload.php', {  // Път към вашия upload скрипт
-				method: 'POST',
-				body: formData
-			})
-			.then(response => response.text())
-			.then(imagePath => {
-					const textarea = document.getElementById('topic_desc');
-					const start = textarea.selectionStart;
-					const imageTag = `![Image](${imagePath})`;
-					textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
-					textarea.focus();
-					closeFileUpload();
-			})
-			.catch(error => {
-				console.error('Грешка при качване на снимка:', error);
-				alert('Възникна грешка при качването.');
-			});
-		} else {
-			alert('Моля, изберете снимка за качване.');
-		}
-	}
-// КРАЙ *** тази част е за качването на снимки, ползва ../upload.php и ги качва в папка uploads
+}
 </script>
 
 <?php

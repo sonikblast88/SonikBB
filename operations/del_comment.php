@@ -1,13 +1,13 @@
 <?php
 include '../functions.php';
 
-if (isset($_SESSION['is_loged'])) {
+if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SESSION['user_info']['type']) && ($_SESSION['user_info']['type'] == 1 || $_SESSION['user_info']['type'] == 2)){
     $topic_id = (int)filter_input(INPUT_GET, 'topic_id');
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
     $comment_id = (int)filter_input(INPUT_GET, 'comment_id');
 
-    // Check if user has rights to delete the comment (с prepared statement)
-    $check_sql = "SELECT comment_author FROM comments WHERE comment_id = :comment_id"; // Използваме comment_id, за да е по-точно
+    // Check if user has rights to delete the comment (using prepared statement)
+    $check_sql = "SELECT comment_author FROM comments WHERE comment_id = :comment_id"; // Using comment_id for accuracy
     $check_params = [":comment_id" => $comment_id];
     $check_stmt = run_q($check_sql, $check_params);
 
@@ -15,7 +15,7 @@ if (isset($_SESSION['is_loged'])) {
         $row = $check_stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($row && ($_SESSION['user_info']['user_id'] == $row['comment_author'] || $_SESSION['user_info']['type'] == 2)) {
-            // Изтриваме коментара (с prepared statement)
+            // Delete the comment (using prepared statement)
             $delete_sql = "DELETE FROM comments WHERE comment_id = :comment_id";
             $delete_params = [":comment_id" => $comment_id];
             $result = run_q($delete_sql, $delete_params);
@@ -23,16 +23,16 @@ if (isset($_SESSION['is_loged'])) {
             if ($result) {
                 redirect('../topic.php?topic_id=' . $topic_id . '&cat_id=' . $cat_id);
             } else {
-                echo "Грешка при изтриване на коментара."; // Обработка на грешката
+                echo "Error deleting comment."; // Error handling
             }
         } else {
-            echo 'Нямате права да изтриете този коментар.'; // По-ясно съобщение за грешка
+            echo 'You do not have permission to delete this comment.'; // Clearer error message
         }
     } else {
-        echo "Грешка при проверка на правата за изтриване."; // Обработка на грешката
+        echo "Error checking delete permissions."; // Error handling
     }
 } else {
-    echo 'Не сте влезли в системата.'; // По-ясно съобщение за грешка
+    echo 'You are not logged in.'; // Clearer error message
 }
 
 ?>

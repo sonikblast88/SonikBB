@@ -3,41 +3,41 @@ include '../functions.php';
 
 if (isset($_SESSION['is_loged']) && $_SESSION['user_info']['type'] == 2) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $target_dir = '../uploads/versions/'; // Път към папката с версиите
+        $target_dir = '../uploads/versions/'; // Path to the versions folder
         $target_file = $target_dir . basename($_FILES["version_file"]["name"]);
         $uploadOk = 1;
         $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Проверка за типа на файла (можете да добавите и други проверки)
-        if ($fileType != "zip" && $fileType != "rar") { // Примерни типове файлове
-            echo "Разрешени са само ZIP, RAR файлове.";
+        // Check file type (you can add more checks)
+        if ($fileType != "zip" && $fileType != "rar") { // Example file types
+            echo "Only ZIP and RAR files are allowed."; // Translated message
             $uploadOk = 0;
         }
 
-        // Проверка за съществуващ файл със същото име
+        // Check if a file with the same name already exists
         if (file_exists($target_file)) {
-            echo "Файл с това име вече съществува.";
+            echo "A file with that name already exists."; // Translated message
             $uploadOk = 0;
         }
 
-        // Проверка за размера на файла (например, 30MB)
+        // Check file size (e.g., 30MB)
         if ($_FILES["version_file"]["size"] > 30 * 1024 * 1024) {
-            echo "Размерът на файла е твърде голям.";
+            echo "The file size is too large."; // Translated message
             $uploadOk = 0;
         }
 
         if ($uploadOk == 0) {
-            echo "Файлът не беше качен.";
+            echo "The file was not uploaded."; // Translated message
         } else {
             if (move_uploaded_file($_FILES["version_file"]["tmp_name"], $target_file)) {
-                header("Location: ../downloads.php"); // Пренасочване към страницата с изтегляния
+                header("Location: ../downloads.php"); // Redirect to the downloads page
                 exit();
             } else {
-                echo "Грешка при качване на файла.";
+            echo "Error uploading the file."; // Translated message
             }
         }
     }
 } else {
-    echo "Нямате права да качвате файлове.";
+    echo "You do not have permission to upload files."; // Translated message
 }
 ?>

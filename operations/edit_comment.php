@@ -6,22 +6,22 @@ $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
 $comment_id = (int)filter_input(INPUT_GET, 'comment_id');
 $post_comment_id = (int)filter_input(INPUT_POST, 'post_comment_id');
 
-if (isset($_SESSION['is_loged'])) {
-    // Извличане на коментара (с prepared statement)
-    $sql_select = "SELECT comment FROM comments WHERE comment_id = :comment_id";
+if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SESSION['user_info']['type']) && ($_SESSION['user_info']['type'] == 1 || $_SESSION['user_info']['type'] == 2)){
+    // Retrieving the comment (using prepared statement)
+    $sql_select = "SELECT comment, comment_author FROM comments WHERE comment_id = :comment_id"; // Include comment_author
     $params_select = [":comment_id" => $comment_id];
     $stmt = run_q($sql_select, $params_select);
 
-    if ($stmt && $row = $stmt->fetch(PDO::FETCH_ASSOC)) { // Проверяваме $stmt и дали има резултат
+    if ($stmt && $row = $stmt->fetch(PDO::FETCH_ASSOC)) { // Checking $stmt and if there is a result
 
-        if ($_SESSION['user_info']['type'] == 2 ||  // Админ винаги може да редактира
-            (isset($_SESSION['user_info']['user_id']) && $_SESSION['user_info']['user_id'] == $row['comment_author'])) { // Авторът на коментара също може
+        if ($_SESSION['user_info']['type'] == 2 || // Admin can always edit
+            (isset($_SESSION['user_info']['user_id']) && $_SESSION['user_info']['user_id'] == $row['comment_author'])) { // Comment author can also edit
 
             $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
             if ($form_submit == 1) {
-                $comment = trim(filter_input(INPUT_POST, 'comment')); // Премахнато addslashes()
+                $comment = trim(filter_input(INPUT_POST, 'comment')); // Removed addslashes()
 
-                // Редактиране на коментара (с prepared statement)
+                // Editing the comment (using prepared statement)
                 $sql_update = "UPDATE comments SET comment = :comment WHERE comment_id = :post_comment_id";
                 $params_update = [
                     ":comment" => $comment,
@@ -30,23 +30,23 @@ if (isset($_SESSION['is_loged'])) {
                 $result = run_q($sql_update, $params_update);
 
                 if ($result) {
-                    redirect('../topic.php?topic_id=' . $topic_id . '&cat_id=' . $cat_id); // Коригиран URL-а
+                    redirect('../topic.php?topic_id=' . $topic_id . '&cat_id=' . $cat_id); // Corrected URL
                 } else {
-                    echo "Грешка при редактиране на коментара."; // Обработка на грешката
+                    echo "Error editing the comment."; // Error handling
                 }
             }
         } else {
-            echo "Нямате права да редактирате този коментар.";
+            echo "You do not have permission to edit this comment.";
         }
 
 
     } else {
-        echo "Грешка при извличане на коментара."; // Обработка на грешката
-        exit; // Спираме изпълнението, ако няма резултат
+        echo "Error retrieving the comment."; // Error handling
+        exit; // Stopping execution if there is no result
     }
 
 } else {
-    echo "Не сте влезли в системата.";
+    echo "You are not logged in.";
     exit;
 }
 
@@ -84,105 +84,105 @@ include '../template/header.php';
 </div>
 
 <script>
-    function formatText(type) {
+function formatText(type) {
+    const textarea = document.getElementById('comment');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    let formattedText = '';
+    switch (type) {
+        case 'bold':
+            formattedText = `**${selectedText}**`;
+            break;
+        case 'italic':
+            formattedText = `*${selectedText}*`;
+            break;
+        case 'link':
+            const url = prompt("Enter URL:");
+            if (url) {
+                formattedText = `[${selectedText || 'Link Text'}](${url})`;
+            } else {
+                return; // Handle cancel
+            }
+            break;
+        case 'code':
+            formattedText = "```\n" + selectedText + "\n```";
+            break;
+        case 'heading':
+            const level = prompt("Enter heading level (1-6):", "2");
+            if (level && level >= 1 && level <= 6) {
+                formattedText = "#".repeat(level) + " " + selectedText;
+            } else {
+                return; // Handle cancel or invalid input
+            }
+            break;
+        case 'list':
+            // Handles both ordered and unordered lists
+            const listType = prompt("Enter list type (ol for ordered, ul for unordered):", "ul");
+            if (listType === "ol") {
+                formattedText = selectedText.split('\n').map((line, index) => `${index + 1}. ${line}`).join('\n');
+            } else { // Default to unordered list
+                formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
+            }
+            break;
+        case 'quote':
+            formattedText = selectedText.split('\n').map(line => '> ' + line).join('\n');
+            break;
+    }
+
+    textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+    textarea.focus();
+}
+
+function insertImage() {
+    const imageUrl = prompt('Please enter the image URL:'); // Translated prompt
+    if (imageUrl) {
         const textarea = document.getElementById('comment');
         const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const selectedText = textarea.value.substring(start, end);
-
-        let formattedText = '';
-        switch (type) {
-            case 'bold':
-                formattedText = `**${selectedText}**`;
-                break;
-            case 'italic':
-                formattedText = `*${selectedText}*`;
-                break;
-            case 'link':
-                const url = prompt("Enter URL:");
-                if (url) {
-                    formattedText = `[${selectedText || 'Link Text'}](${url})`;
-                } else {
-                    return; // Handle cancel
-                }
-                break;
-            case 'code':
-                formattedText = "```\n" + selectedText + "\n```";
-                break;
-            case 'heading':
-                const level = prompt("Enter heading level (1-6):", "2");
-                if (level && level >= 1 && level <= 6) {
-                    formattedText = "#".repeat(level) + " " + selectedText;
-                } else {
-                    return; // Handle cancel or invalid input
-                }
-                break;
-            case 'list':
-                // Handles both ordered and unordered lists
-                const listType = prompt("Enter list type (ol for ordered, ul for unordered):", "ul");
-                if (listType === "ol") {
-                    formattedText = selectedText.split('\n').map((line, index) => `${index + 1}. ${line}`).join('\n');
-                } else { // Default to unordered list
-                    formattedText = selectedText.split('\n').map(line => `- ${line}`).join('\n');
-                }
-                break;
-            case 'quote':
-                formattedText = selectedText.split('\n').map(line => '> ' + line).join('\n');
-                break;
-        }
-
-        textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+        const imageTag = `![Image](${imageUrl})`;
+        textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
         textarea.focus();
     }
+}
 
-    function insertImage() {
-        const imageUrl = prompt('Моля, въведете URL на картинката:');
-        if (imageUrl) {
+function openFileUpload() {
+    document.getElementById('fileUploadModal').style.display = 'block';
+}
+
+function closeFileUpload() {
+    document.getElementById('fileUploadModal').style.display = 'none';
+}
+
+function uploadImage() {
+    const fileInput = document.getElementById('imageUpload');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const formData = new FormData();
+        formData.append('imageUpload', file);
+
+        fetch('../upload.php', { // Path to your upload script
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(imagePath => {
             const textarea = document.getElementById('comment');
             const start = textarea.selectionStart;
-            const imageTag = `![Image](${imageUrl})`;
+            const imageTag = `![Image](${imagePath})`;
             textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
             textarea.focus();
-        }
+            closeFileUpload();
+        })
+        .catch(error => {
+            console.error('Error uploading image:', error);
+            alert('An error occurred during upload.'); // Translated alert
+        });
+    } else {
+        alert('Please select an image to upload.'); // Translated alert
     }
-	
-    function openFileUpload() {
-        document.getElementById('fileUploadModal').style.display = 'block';
-    }
-
-    function closeFileUpload() {
-        document.getElementById('fileUploadModal').style.display = 'none';
-    }
-
-    function uploadImage() {
-        const fileInput = document.getElementById('imageUpload');
-        const file = fileInput.files[0];
-
-        if (file) {
-            const formData = new FormData();
-            formData.append('imageUpload', file);
-
-            fetch('../upload.php', {  // Път към вашия upload скрипт
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(imagePath => {
-                    const textarea = document.getElementById('comment');
-                    const start = textarea.selectionStart;
-                    const imageTag = `![Image](${imagePath})`;
-                    textarea.value = textarea.value.substring(0, start) + imageTag + textarea.value.substring(start);
-                    textarea.focus();
-                    closeFileUpload();
-            })
-            .catch(error => {
-                console.error('Грешка при качване на снимка:', error);
-                alert('Възникна грешка при качването.');
-            });
-        } else {
-            alert('Моля, изберете снимка за качване.');
-        }
-    }
+}
 </script>
 
 <?php
