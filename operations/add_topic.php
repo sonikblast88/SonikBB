@@ -5,8 +5,8 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
     $post_cat_id = (int)filter_input(INPUT_POST, 'post_cat_id');
     $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
-    $topic_name = trim(filter_input(INPUT_POST, 'topic_name')); // No need for addslashes() with prepared statements
-    $topic_desc = trim(filter_input(INPUT_POST, 'topic_desc')); // No need for addslashes() with prepared statements
+    $topic_name = trim(filter_input(INPUT_POST, 'topic_name'));
+    $topic_desc = trim(filter_input(INPUT_POST, 'topic_desc'));
 
     if ($form_submit == 1) {
         // Using prepared statement
