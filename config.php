@@ -13,7 +13,7 @@ define('WEBSITE_DESC', 'SonikBB Small and Lite Forum Written In PHP');
 
 // Other settings
 define('SITE_TITLE', 'SONIKBB DEV FORUMS'); // Site title
-define('SITE_VERSION', '0.0.21 Dev'); // Site version
+define('SITE_VERSION', '0.0.22 Dev'); // Site version
 date_default_timezone_set('Europe/Sofia'); // Time zone
 
 define('EXCLUDED_FILES', array('.htaccess', 'config.php', 'README.md', 'скрит_файл.zip', 'index.php', 'download_counts.txt')); // Translated file name
