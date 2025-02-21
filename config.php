@@ -9,6 +9,7 @@ define('DB_NAME', 'myforum'); // Database name
 // Path to the forum
 $path = './'; // or '/sonikbb/' or another value
 define('WEBSITE', "https://sonikbb.eu/dev"); // do not add a slash at the end / | no / at the end |
+define('WEBSITE_DESC', 'SonikBB Small and Lite Forum Written In PHP');
 
 // Other settings
 define('SITE_TITLE', 'SONIKBB DEV FORUMS'); // Site title
