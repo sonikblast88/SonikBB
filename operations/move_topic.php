@@ -18,16 +18,16 @@ if (isset($_POST['topic_id'], $_POST['new_cat_id']) && isset($_SESSION['is_loged
         $update_stmt = run_q($update_sql, $update_params);
 
         if ($update_stmt) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']); // Or another appropriate page
+            header('Location: ' . $_SERVER['HTTP_REFERER']); 
             exit;
         } else {
-            echo "Error moving the topic."; // Translated error message
+            echo "Error moving the topic."; 
         }
     } else {
-        echo "You do not have permission to move this topic."; // Translated permission message
+        echo "You do not have permission to move this topic."; 
     }
 } else {
-    echo "Invalid parameters."; // Translated invalid parameters message
+    echo "Invalid parameters."; 
 }
 
 ?>
