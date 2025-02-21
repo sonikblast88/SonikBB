@@ -22,6 +22,8 @@ SonikBB is a lightweight and fast forum written in PHP. It is designed to be eas
 4.  Copy the installer config.php to the sonikbb root directory config.php
 5.  Go to your new website and have fun
 
+( simple tutorial with pictures here https://sonikbb.eu/topic.php?topic_id=114&cat_id=46 )
+
 ## Requirements
 
 *   PHP 7.0 or later
