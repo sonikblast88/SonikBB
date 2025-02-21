@@ -6,7 +6,6 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
 
     if ($topic_id > 0) {
-        // Fetch topic data (using prepared statement)
         $sql_select = "SELECT topic_name, topic_desc, topic_author FROM topics WHERE topic_id = :topic_id";
         $params_select = [":topic_id" => $topic_id];
         $stmt = run_q($sql_select, $params_select);
@@ -23,8 +22,6 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
                     $topic_desc = trim(filter_input(INPUT_POST, 'topic_desc'));
                     $post_cat_id = (int)filter_input(INPUT_POST, 'post_cat_id');
                     $post_topic_id = (int)filter_input(INPUT_POST, 'post_topic_id');
-
-                    // Update topic (using prepared statement)
                     $sql_update = "UPDATE topics SET topic_name = :topic_name, topic_desc = :topic_desc WHERE topic_id = :post_topic_id";
                     $params_update = [
                         ":topic_name" => $topic_name,
@@ -36,7 +33,7 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
                     if ($result) {
                         redirect('../topic.php?topic_id=' . $post_topic_id . '&cat_id=' . $post_cat_id);
                     } else {
-                        echo "Error updating topic."; // Error handling
+                        echo "Error updating topic.";
                     }
                 }
             } else {
@@ -109,7 +106,7 @@ function formatText(type) {
             if (url) {
                 formattedText = `[${selectedText || 'Link Text'}](${url})`;
             } else {
-                return; // Handle cancel
+                return;
             }
             break;
         case 'code':
@@ -120,7 +117,7 @@ function formatText(type) {
             if (level && level >= 1 && level <= 6) {
                 formattedText = "#".repeat(level) + " " + selectedText;
             } else {
-                return; // Handle cancel or invalid input
+                return; 
             }
             break;
         case 'list':
@@ -136,7 +133,7 @@ function formatText(type) {
 }
 
 function insertImage() {
-    const imageUrl = prompt('Please enter the image URL:'); // Translated prompt
+    const imageUrl = prompt('Please enter the image URL:');
     if (imageUrl) {
         const textarea = document.getElementById('topic_desc');
         const start = textarea.selectionStart;
@@ -176,11 +173,11 @@ function uploadImage() {
             closeFileUpload();
         })
         .catch(error => {
-            console.error('Error uploading image:', error); // Translated error message
-            alert('An error occurred during upload.'); // Translated alert
+            console.error('Error uploading image:', error);
+            alert('An error occurred during upload.'); 
         });
     } else {
-        alert('Please select an image to upload.'); // Translated alert
+        alert('Please select an image to upload.'); 
     }
 }
 </script>
