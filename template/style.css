@@ -36,6 +36,7 @@ a:hover {
     margin: 0 auto;
 }
 
+/* TOP MENU */
 #navigation {
     float: left;
     width: 100%;
@@ -60,7 +61,7 @@ a:hover {
     display: block;
     float: left;
     padding: 5px 10px;
-    color: #fff;
+    color: #000000;
     text-decoration: none;
     border-right: 1px solid #fff;
 }
