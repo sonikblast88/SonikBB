@@ -5,6 +5,7 @@
     <link href="<?php echo WEBSITE; ?>/template/style.css" rel="stylesheet" type="text/css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="<?php echo WEBSITE_DESC; ?>">
 </head>
 <body>
 <div id="container">
