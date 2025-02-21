@@ -57,26 +57,49 @@ if (isset($_GET['download'])) {
     }
 }
 
+// Get all files and sort them by modification date
+$files = scandir(__DIR__ . '/uploads/versions');
+$file_details = [];
+foreach ($files as $file) {
+    if ($file != "." && $file != ".." && is_file(__DIR__ . '/uploads/versions/' . $file) && !in_array($file, EXCLUDED_FILES)) {
+        $file_path = __DIR__ . '/uploads/versions/' . $file;
+        $file_details[] = [
+            'name' => $file,
+            'size' => filesize($file_path),
+            'date' => filemtime($file_path),
+            'download_count' => isset($download_counts[$file]) ? $download_counts[$file] : 0
+        ];
+    }
+}
+
+// Sort files by date (newest first)
+usort($file_details, function($a, $b) {
+    return $b['date'] - $a['date'];
+});
+
 // Display the table of files and download counts
 echo '<table border="1">';
 echo "<tr><th>File</th><th>Size</th><th>Upload Date</th><th>Downloads</th><th>Download</th></tr>";
 
-$files = scandir(__DIR__ . '/uploads/versions');
-foreach ($files as $file) {
-    if ($file != "." && $file != ".." && is_file(__DIR__ . '/uploads/versions/' . $file) && !in_array($file, EXCLUDED_FILES)) { // Check for EXCLUDED_FILES
-        $file_path = __DIR__ . '/uploads/versions/' . $file;
-        $file_size = filesize($file_path);
-        $file_size_kb = round($file_size / 1024, 2);
-        $file_date = date("d.m.Y H:i:s", filemtime($file_path));
-        $download_count = isset($download_counts[$file]) ? $download_counts[$file] : 0;
+foreach ($file_details as $index => $file) {
+    $file_size_kb = round($file['size'] / 1024, 2);
+    $file_date = date("d.m.Y H:i:s", $file['date']);
+    $download_count = $file['download_count'];
+    $file_name = $file['name'];
+
+    // Highlight the newest file in green
+    if ($index === 0) {
+        echo "<tr style='background-color: lightgreen;'>";
+    } else {
         echo "<tr>";
-        echo "<td>" . $file . "</td>";
-        echo "<td>" . $file_size_kb . " KB</td>";
-        echo "<td>" . $file_date . "</td>";
-        echo "<td>" . $download_count . "</td>";
-        echo "<td><a href='?download=" . $file . "'>Download</a></td>";
-        echo "</tr>";
     }
+
+    echo "<td>" . $file_name . "</td>";
+    echo "<td>" . $file_size_kb . " KB</td>";
+    echo "<td>" . $file_date . "</td>";
+    echo "<td>" . $download_count . "</td>";
+    echo "<td><a href='?download=" . $file_name . "'>Download</a></td>";
+    echo "</tr>";
 }
 
 echo "</table>";
