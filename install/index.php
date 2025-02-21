@@ -10,6 +10,7 @@ $site_title = 'My Forum';
 $website = "http://yourwebsite.com";
 $site_version = "0.0.21 Dev";
 $excluded_files = "'.htaccess', 'config.php', 'README.md', 'скрит_файл.zip', 'index.php', 'download_counts.txt'";
+$websitedesc = 'SonikBB Small and Lite Forum Written In PHP';
 
 $errors = [];
 
@@ -21,6 +22,7 @@ if (isset($_POST['submit'])) {
     $path = $_POST['path'];
     $site_title = $_POST['site_title'];
     $website = $_POST['website'];
+	$websitedesc = $_POST['websitedesc'];
     $admin_username = $_POST['admin_username'];
     $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
 
@@ -100,6 +102,7 @@ if (isset($_POST['submit'])) {
                         $config_content .=  '$path = ' . "'$path';\n\n";
                         $config_content .= "// Other settings\n";
                         $config_content .= "define('WEBSITE', '$website');\n";
+						$config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
                         $config_content .= "define('SITE_TITLE', '$site_title');\n";
 						$config_content .= "define('SITE_VERSION', '$site_version');\n";
                         $config_content .= "date_default_timezone_set('Europe/Sofia');\n\n";
@@ -231,6 +234,9 @@ if (isset($_POST['submit'])) {
 
         <label for="website">Website URL:</label><br>
         <input type="text" name="website" id="website" value="<?php echo htmlspecialchars($website); ?>" required><br><br>
+		
+		<label for="website">Website DESC:</label><br>
+        <input type="text" name="websitedesc" id="website" value="<?php echo htmlspecialchars($websitedesc); ?>" required><br><br>
 
         <label for="admin_username">Admin Username:</label><br>
         <input type="text" name="admin_username" id="admin_username" required><br><br>
