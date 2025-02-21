@@ -9,40 +9,37 @@ $form_submit = filter_input(INPUT_POST, 'form_submit');
 $question = filter_input(INPUT_POST, 'question');
 
 if ($form_submit == 1) {
-	
-	if($question != 8){ echo 'wrong question'; exit;}
-
-    $sql = "SELECT user_id, username, password, type, avatar, signature FROM users WHERE username = :username";
-    $params = [
-        ":username" => $username
-    ];
-    $stmt = run_q($sql, $params);
-
-    if ($stmt) {
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row && password_verify($password, $row['password'])) {
-            $_SESSION['is_loged'] = true;
-            $_SESSION['user_info'] = $row;
-
-            $update_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
-            $update_params = [
-                ":last_login" => date('Y-m-d H:i:s'),
-                ":user_id" => $_SESSION['user_info']['user_id']
-            ];
-            $update_result = run_q($update_sql, $update_params);
-
-            if ($update_result) {
-                redirect('index.php');
-            } else {
-                echo "Error updating last_login."; // Translated message
-            }
-        } else {
-            echo 'Incorrect username or password.'; // Translated message
-        }
-    } else {
-        echo "Error executing the query."; // Translated message
-    }
+	if($question != 8) { // CHECK FOR SECURITY NUMBER 8
+		echo 'wrong question'; 
+	} else {
+		$sql = "SELECT user_id, username, password, type, avatar, signature FROM users WHERE username = :username";
+		$params = [
+			":username" => $username
+		];
+		$stmt = run_q($sql, $params);
+		if ($stmt) {
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			if ($row && password_verify($password, $row['password'])) {
+				$_SESSION['is_loged'] = true;
+				$_SESSION['user_info'] = $row;
+				$update_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
+				$update_params = [
+					":last_login" => date('Y-m-d H:i:s'),
+					":user_id" => $_SESSION['user_info']['user_id']
+				];
+				$update_result = run_q($update_sql, $update_params);
+				if ($update_result) {
+					redirect('index.php');
+				} else {
+					echo "Error updating last_login.";
+				}
+			} else {
+				echo 'Incorrect username or password.';
+			}
+		} else {
+			echo "Error executing the query.";
+		}
+	}
 }
 ?>
 

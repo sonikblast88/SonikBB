@@ -14,8 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Input data validation
 	
-	if($question != 8){ echo 'wrong question'; exit;}
-	
     if (empty($username)) {
         $errors[] = 'Username is required.';
     } elseif (strlen($username) < 3 || strlen($username) > 42) {
@@ -51,48 +49,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($check_result && $check_result->rowCount() > 0) {
             $errors[] = 'Username or email address already exists.';
         } else {
-            // User registration
-            $insert_sql = "INSERT INTO users (username, email, password, signature, last_login) VALUES (:username, :email, :password, :signature, :last_login)";
-            $insert_params = [
-                ":username" => $username,
-                ":email" => $email,
-                ":password" => $hashed_password, // Use the hashed password
-                ":signature" => $signature,
-                ":last_login" => $last_login
-            ];
-            $insert_result = run_q($insert_sql, $insert_params);
+			if($question != 8){ echo 'wrong question'; } else {
+				// User registration
+				$insert_sql = "INSERT INTO users (username, email, password, signature, last_login) VALUES (:username, :email, :password, :signature, :last_login)";
+				$insert_params = [
+					":username" => $username,
+					":email" => $email,
+					":password" => $hashed_password, // Use the hashed password
+					":signature" => $signature,
+					":last_login" => $last_login
+				];
+				$insert_result = run_q($insert_sql, $insert_params);
 
-            if ($insert_result) {
-                echo '<div class="success">Registration was successful!</div>';
+				if ($insert_result) {
+					echo '<div class="success">Registration was successful!</div>';
 
-                // Automatic user login
-                $login_sql = "SELECT user_id, username, type, avatar, signature, password FROM users WHERE username = :username";
-                $login_params = [":username" => $username];
-                $login_stmt = run_q($login_sql, $login_params);
+					// Automatic user login
+					$login_sql = "SELECT user_id, username, type, avatar, signature, password FROM users WHERE username = :username";
+					$login_params = [":username" => $username];
+					$login_stmt = run_q($login_sql, $login_params);
 
-                if ($login_stmt && $row = $login_stmt->fetch(PDO::FETCH_ASSOC)) {
-                    if (password_verify($password, $row['password'])) { // Password check
-                        $_SESSION['is_loged'] = true;
-                        $_SESSION['user_info'] = $row;
+					if ($login_stmt && $row = $login_stmt->fetch(PDO::FETCH_ASSOC)) {
+						if (password_verify($password, $row['password'])) { // Password check
+							$_SESSION['is_loged'] = true;
+							$_SESSION['user_info'] = $row;
 
-                        $update_login_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
-                        $update_login_params = [
-                            ":last_login" => date('Y-m-d H:i:s'),
-                            ":user_id" => $_SESSION['user_info']['user_id']
-                        ];
-                        run_q($update_login_sql, $update_login_params);
+							$update_login_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
+							$update_login_params = [
+								":last_login" => date('Y-m-d H:i:s'),
+								":user_id" => $_SESSION['user_info']['user_id']
+							];
+							run_q($update_login_sql, $update_login_params);
 
-                        redirect('index.php');
-                    } else {
-                        echo 'Incorrect username or password.'; // This should not happen, but it's good to have a check
-                    }
-                } else {
-                    echo "Error with automatic login.";
-                }
+							redirect('index.php');
+						} else {
+							echo 'Incorrect username or password.'; // This should not happen, but it's good to have a check
+						}
+					} else {
+						echo "Error with automatic login.";
+					}
 
-            } else {
-                $errors[] = 'Error during registration. Please try again later.';
-            }
+				} else {
+					$errors[] = 'Error during registration. Please try again later.';
+				}
+			}
         }
     }
 }
