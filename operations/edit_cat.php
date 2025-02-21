@@ -4,9 +4,9 @@ include '../functions.php';
 if (isset($_SESSION['is_loged']) && $_SESSION['user_info']['type'] == 2) {
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
     $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
-    $cat_name = trim(filter_input(INPUT_POST, 'cat_name')); // Removed addslashes()
-    $cat_desc = trim(filter_input(INPUT_POST, 'cat_desc')); // Removed addslashes()
-    $def_icon = trim(filter_input(INPUT_POST, 'def_icon')); // Removed addslashes()
+    $cat_name = trim(filter_input(INPUT_POST, 'cat_name'));
+    $cat_desc = trim(filter_input(INPUT_POST, 'cat_desc'));
+    $def_icon = trim(filter_input(INPUT_POST, 'def_icon'));
     $post_cat_id = (int)filter_input(INPUT_POST, 'post_cat_id');
 
     // Retrieving category data (using prepared statement)
