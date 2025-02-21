@@ -10,8 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
+	$question = filter_input(INPUT_POST, 'question');
 
     // Input data validation
+	
+	if($question != 8){ echo 'wrong question'; exit;}
+	
     if (empty($username)) {
         $errors[] = 'Username is required.';
     } elseif (strlen($username) < 3 || strlen($username) > 42) {
@@ -115,7 +119,10 @@ if (!empty($errors)) {
 
     <label for="confirm_password">Confirm Password:</label><br>
     <input type="password" name="confirm_password" id="confirm_password" required><br><br>
-
+		
+	<label for="question"><b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" /></label><br>
+	<input type="text" id="question" name="question" size="50" required><br><br>
+		
     <input type="submit" value="Register">
 </form>
 

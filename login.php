@@ -6,8 +6,12 @@ echo '<div id="content">';
 $username = filter_input(INPUT_POST, 'username');
 $password = filter_input(INPUT_POST, 'password');
 $form_submit = filter_input(INPUT_POST, 'form_submit');
+$question = filter_input(INPUT_POST, 'question');
 
 if ($form_submit == 1) {
+	
+	if($question != 8){ echo 'wrong question'; exit;}
+
     $sql = "SELECT user_id, username, password, type, avatar, signature FROM users WHERE username = :username";
     $params = [
         ":username" => $username
@@ -46,6 +50,10 @@ if ($form_submit == 1) {
     <form action="login.php" method="post">
         <label for="username">Username:</label> <input type="text" id="username" name="username" placeholder="Enter username" required><br/>
         <label for="password">Password:</label> <input type="password" id="password" name="password" placeholder="Enter password" required><br/>
+		
+		<label for="question"><b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" /></label><br>
+		<input type="text" id="question" name="question" size="50" required><br><br>
+		
         <input type="hidden" name="form_submit" value="1">
         <input type="submit" value="Log in">  </form>
 </center>
