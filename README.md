@@ -26,6 +26,12 @@ SonikBB is a lightweight and fast forum written in PHP. It is designed to be eas
 
 ( simple tutorial with pictures here https://sonikbb.eu/topic.php?topic_id=114&cat_id=46 )
 
+## Upgrade
+
+1. Delete all files and folders EXCEPT uploads and config.php
+2. Do not upload Install folder
+3. Upload ALL other files and folders
+
 ## Requirements
 
 *   PHP 7.0 or later
