@@ -5,7 +5,7 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
     $cat_id = (int)filter_input(INPUT_GET, 'cat_id');
     $topic_id = (int)filter_input(INPUT_GET, 'topic_id');
     $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
-    $comment = trim(filter_input(INPUT_POST, 'comment')); // No need for addslashes() with prepared statements
+    $comment = trim(filter_input(INPUT_POST, 'comment'));
     $post_topic_id = (int)filter_input(INPUT_POST, 'post_topic_id');
     $post_cat_id = (int)filter_input(INPUT_POST, 'post_cat_id');
 
