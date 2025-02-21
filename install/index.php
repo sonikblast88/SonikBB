@@ -92,6 +92,27 @@ if (isset($_POST['submit'])) {
                     } else {
                         mysqli_commit($conn);
 
+			// getting simple data for registered forum
+			$ip_address = $_SERVER['REMOTE_ADDR'];
+			$domain_name = gethostbyaddr($ip_address);
+			$server_os = php_uname('s');
+			$web_server = $_SERVER['SERVER_SOFTWARE'];
+			// getting simple data for registered forum
+			$data = array(
+				'ip_address' => $ip_address,
+				'domain_name' => $domain_name,
+				'server_os' => $server_os,
+				'web_server' => $web_server
+			);
+			$url = 'https://sonikbb.eu/collect_data.php'; // URL на скрипта на сървъра
+			// getting simple data for registered forum
+			$ch = curl_init($url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($ch);
+			curl_close($ch);			
+						
                         $config_content = "<?php\n\n";
                         $config_content .= "// Database settings\n";
                         $config_content .= "define('DB_HOST', '$db_host');\n";
