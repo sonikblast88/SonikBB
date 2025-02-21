@@ -32,7 +32,6 @@ echo '<br />';
 echo '<div id="last-topics">';
 echo '<div id="last-topics-topic-header">» L A S T - T O P I C S</div>';
 
-// Using prepared statement
 $sql_last_topics = "SELECT topic_id, topic_name FROM topics WHERE topic_id > 0 ORDER BY topic_id DESC LIMIT 5";
 $query2 = run_q($sql_last_topics);
 
