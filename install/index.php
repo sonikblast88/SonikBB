@@ -8,9 +8,9 @@ $db_name = '';
 $path = './';
 $site_title = 'My Forum';
 $website = "http://yourwebsite.com";
-$site_version = "0.0.21 Dev";
-$excluded_files = "'.htaccess', 'config.php', 'README.md', 'скрит_файл.zip', 'index.php', 'download_counts.txt'";
+$excluded_files = "'.htaccess', 'config.php', 'README.md', 'hidden_file.zip', 'index.php', 'download_counts.txt'";
 $websitedesc = 'SonikBB Small and Lite Forum Written In PHP';
+$site_version = '0.0.24';
 
 $errors = [];
 
@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $path = $_POST['path'];
     $site_title = $_POST['site_title'];
     $website = $_POST['website'];
-	$websitedesc = $_POST['websitedesc'];
+    $websitedesc = $_POST['websitedesc'];
     $admin_username = $_POST['admin_username'];
     $admin_password = password_hash($_POST['admin_password'], PASSWORD_DEFAULT);
 
@@ -92,27 +92,77 @@ if (isset($_POST['submit'])) {
                     } else {
                         mysqli_commit($conn);
 
-			// getting simple data for registered forum
-			$ip_address = $_SERVER['REMOTE_ADDR'];
-			$domain_name = gethostbyaddr($ip_address);
-			$server_os = php_uname('s');
-			$web_server = $_SERVER['SERVER_SOFTWARE'];
-			// getting simple data for registered forum
-			$data = array(
-				'ip_address' => $ip_address,
-				'domain_name' => $domain_name,
-				'server_os' => $server_os,
-				'web_server' => $web_server
-			);
-			$url = 'https://sonikbb.eu/collect_data.php'; // URL на скрипта на сървъра
-			// getting simple data for registered forum
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			$response = curl_exec($ch);
-			curl_close($ch);			
-						
+						if (isset($_POST['send_data'])) {
+							// srv info
+							$ip_address = $_SERVER['SERVER_ADDR'];
+							$domain_name = $_SERVER['HTTP_HOST'];
+							$server_os = php_uname('s');
+							$server_architecture = php_uname('m');
+							$kernel_version = php_uname('r');
+							$server_name = gethostname();
+
+							// web info
+							$web_server = $_SERVER['SERVER_SOFTWARE'];
+							$web_server_port = $_SERVER['SERVER_PORT'];
+
+							// PHP info
+							$php_version = phpversion();
+							$php_extensions = get_loaded_extensions();
+
+							// DB info
+							$db_type = 'MySQL';
+							$db_version = mysqli_get_server_info($conn);
+
+							// Install info
+							$forum_version = $site_version;
+							$forum_path = $path;
+
+							// Srv Env info
+							$max_execution_time = ini_get('max_execution_time');
+							$memory_limit = ini_get('memory_limit');
+							$upload_max_filesize = ini_get('upload_max_filesize');
+
+							// Geo info
+							$ip_geolocation = file_get_contents("http://ip-api.com/json/{$ip_address}");
+							$ip_geolocation = json_decode($ip_geolocation, true);
+
+							// Data to send
+							$data = array(
+								'ip_address' => $ip_address,
+								'domain_name' => $domain_name,
+								'server_os' => $server_os,
+								'server_architecture' => $server_architecture,
+								'kernel_version' => $kernel_version,
+								'server_name' => $server_name,
+								'web_server' => $web_server,
+								'web_server_port' => $web_server_port,
+								'php_version' => $php_version,
+								'php_extensions' => $php_extensions,
+								'db_type' => $db_type,
+								'db_version' => $db_version,
+								'forum_version' => $forum_version,
+								'forum_path' => $forum_path,
+								'max_execution_time' => $max_execution_time,
+								'memory_limit' => $memory_limit,
+								'upload_max_filesize' => $upload_max_filesize,
+								'ip_geolocation' => $ip_geolocation
+							);
+
+							// Send data
+							$url = 'https://sonikbb.eu/uploads/collect_data.php';
+							$ch = curl_init($url);
+							curl_setopt($ch, CURLOPT_POST, 1);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+							$response = curl_exec($ch);
+							curl_close($ch);
+
+							if ($response === false) {
+								echo 'Error: ' . curl_error($ch);
+							}
+						}
+
                         $config_content = "<?php\n\n";
                         $config_content .= "// Database settings\n";
                         $config_content .= "define('DB_HOST', '$db_host');\n";
@@ -123,11 +173,10 @@ if (isset($_POST['submit'])) {
                         $config_content .=  '$path = ' . "'$path';\n\n";
                         $config_content .= "// Other settings\n";
                         $config_content .= "define('WEBSITE', '$website');\n";
-						$config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
+                        $config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
                         $config_content .= "define('SITE_TITLE', '$site_title');\n";
-						$config_content .= "define('SITE_VERSION', '$site_version');\n";
                         $config_content .= "date_default_timezone_set('Europe/Sofia');\n\n";
-						$config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
+                        $config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
                         $config_content .= "?>";
 
                         $encoded_content = urlencode($config_content);
@@ -255,8 +304,8 @@ if (isset($_POST['submit'])) {
 
         <label for="website">Website URL:</label><br>
         <input type="text" name="website" id="website" value="<?php echo htmlspecialchars($website); ?>" required><br><br>
-		
-		<label for="website">Website DESC:</label><br>
+        
+        <label for="website">Website Description:</label><br>
         <input type="text" name="websitedesc" id="website" value="<?php echo htmlspecialchars($websitedesc); ?>" required><br><br>
 
         <label for="admin_username">Admin Username:</label><br>
@@ -264,6 +313,9 @@ if (isset($_POST['submit'])) {
 
         <label for="admin_password">Admin Password:</label><br>
         <input type="password" name="admin_password" id="admin_password" required><br><br>
+
+        <label for="send_data"><small>Send installation information:</small></label>
+        <input type="checkbox" name="send_data" id="send_data" checked><br><br>
 
         <input type="submit" name="submit" value="Install">
     </form>
