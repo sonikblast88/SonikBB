@@ -1,6 +1,6 @@
 # SonikBB
 
-![Screenshot 2025-02-21 003659](https://github.com/user-attachments/assets/e48a40f9-6add-4a10-9f33-bfd477d97863)
+![Screenshot 2025-02-21 111732](https://github.com/user-attachments/assets/e7be1900-3b5f-4841-a0c8-ed09cbd6d65c)
 
 # My main idea is that every new programmer can understand and contribute to the forum or just play and learn new things for himself.
 
@@ -32,7 +32,6 @@ SonikBB is a lightweight and fast forum written in PHP. It is designed to be eas
 SonikBB is under development and new features and improvements are constantly being added. If you want to contribute to the development of the forum, you can submit a pull request or create a new issue in the GitHub repository.
 
 ## License
-
 MIT License
 
 ## Contacts
@@ -47,4 +46,6 @@ Thank you to everyone who contributed to the development of SonikBB!
 
 https://sonikbb.eu/
 
-![Screenshot 2025-02-21 003534](https://github.com/user-attachments/assets/1efa3b8b-9f01-4cb9-b63a-af753bdd1003)
+![Screenshot 2025-02-21 111606](https://github.com/user-attachments/assets/df366d8d-a32c-4bcb-a6ad-95a0d4f34568)
+
+![Screenshot 2025-02-21 111616](https://github.com/user-attachments/assets/de2724a1-00b2-4592-afd2-70d2916f02f0)
