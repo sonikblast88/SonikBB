@@ -8,7 +8,48 @@ if ((int)$_SESSION['user_info']['type'] !== 2) {
     exit; // It's important to use exit after header()
 }
 
-echo '<div id="content">';
+echo '<div style="width: 92%; border: 1px solid black; margin: 0 auto;padding:15px;padding-top: 0px;margin-top: 20px;box-shadow: 0 0 8px rgba(0, 0, 0, .8);border-radius: 5px;overflow: hidden;">';
+
+// Function to detect bots
+function detect_bot($user_agent) {
+    $bots = [
+        'Googlebot' => 'Google Bot',
+        'Bingbot' => 'Bing Bot',
+        'Slurp' => 'Yahoo Bot',
+        'DuckDuckBot' => 'DuckDuckGo Bot',
+        'Baiduspider' => 'Baidu Bot',
+        'YandexBot' => 'Yandex Bot',
+        'Sogou' => 'Sogou Bot',
+        'Exabot' => 'Exalead Bot',
+        'facebot' => 'Facebook Bot',
+        'ia_archiver' => 'Alexa Bot',
+    ];
+
+    foreach ($bots as $bot => $name) {
+        if (stripos($user_agent, $bot) !== false) {
+            return $name;
+        }
+    }
+    return 'No';
+}
+
+// Function to get location by IP using ip-api.com
+function get_location_by_ip($ip) {
+    $url = "http://ip-api.com/json/$ip";
+    $response = @file_get_contents($url); // Use @ to suppress warnings
+    if ($response === false) {
+        return null; // Return null if the request fails
+    }
+
+    $data = json_decode($response, true);
+    if ($data && $data['status'] === 'success') {
+        return [
+            'country' => $data['country'], // Country
+            'city' => $data['city']       // City
+        ];
+    }
+    return null; // If we can't determine the location
+}
 
 // Functions for fetching data - using prepared statements
 function get_daily_unique_visits($date) {
@@ -94,7 +135,7 @@ echo '<div id="yearly_chart" style="width: 100%; height: 300px;"></div>';
 
     function drawDailyChart() {
         var data = google.visualization.arrayToDataTable([
-            ['Hour', 'Visits', 'Unique Visitors'], // Added column
+            ['Hour', 'Visits', 'Unique Visitors'],
             <?php
             $today = date("Y-m-d");
             $daily_visits_data = [];
@@ -104,8 +145,8 @@ echo '<div id="yearly_chart" style="width: 100%; height: 300px;"></div>';
                 $sql_unique = "SELECT COUNT(DISTINCT ip_address) FROM visitors WHERE DATE(visit_time) = '$today' AND HOUR(visit_time) = '$hour'";
                 $result_total = run_q($sql_total);
                 $result_unique = run_q($sql_unique);
-                $count_total = $result_total->fetchColumn() ?? 0; // Using fetchColumn()
-                $count_unique = $result_unique->fetchColumn() ?? 0; // Using fetchColumn()
+                $count_total = $result_total->fetchColumn() ?? 0;
+                $count_unique = $result_unique->fetchColumn() ?? 0;
                 $daily_visits_data[$hour] = ['total' => $count_total, 'unique' => $count_unique];
             }
             foreach ($daily_visits_data as $hour => $counts) {
@@ -218,8 +259,6 @@ echo '<div id="yearly_chart" style="width: 100%; height: 300px;"></div>';
 </script>
 
 <?php
-// ... (code for charts from the previous response)
-
 // Handling deletion (using prepared statement)
 if (isset($_POST['delete_ip']) || isset($_GET['ip'])) {
     $ip_address_to_delete = isset($_POST['ip_address']) ? $_POST['ip_address'] : $_GET['ip'];
@@ -241,7 +280,7 @@ if (isset($_POST['delete_ip']) || isset($_GET['ip'])) {
 
 // Fetching visitor data (using prepared statement)
 $sql = "SELECT v1.* FROM visitors v1 
-        INNER JOIN (SELECT ip_address, MAX(visit_time) AS last_visit_time FROM visitors GROUP BY ip_address ORDER BY last_visit_time DESC LIMIT 100) v2 
+        INNER JOIN (SELECT ip_address, MAX(visit_time) AS last_visit_time FROM visitors GROUP BY ip_address ORDER BY last_visit_time DESC LIMIT 42) v2 
         ON v1.ip_address = v2.ip_address AND v1.visit_time = v2.last_visit_time 
         ORDER BY v2.last_visit_time DESC";
 
@@ -258,7 +297,7 @@ $query = run_q($sql);
 <?php
 
 if ($query && $query->rowCount() > 0) {
-    echo '<h2>Last 100 Visitors</h2>';
+    echo '<h2>Last 42 Visitors</h2>';
     echo '<div class="table-container">';
     echo '<table class="visitor-table">';
     echo '<thead>
@@ -268,17 +307,28 @@ if ($query && $query->rowCount() > 0) {
                 <th>Referrer</th>
                 <th>Visit Time</th>
                 <th>Page</th>
+                <th>Is Bot</th>
+                <th>Country</th>
+                <th>City</th> <!-- New column -->
             </tr>
           </thead>
           <tbody>';
 
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        echo '<tr>
+        $bot_name = detect_bot($row['user_agent']);
+        $row_class = $bot_name !== 'No' ? 'class="bot-row"' : '';
+        $location = get_location_by_ip($row['ip_address']); // Get location
+        $country = $location ? $location['country'] : 'Unknown';
+        $city = $location ? $location['city'] : 'Unknown'; // Get city
+        echo '<tr ' . $row_class . '>
                 <td><a href="?ip=' . $row['ip_address'] . '" onclick="return confirm(\'Are you sure you want to delete records with IP address ' . $row['ip_address'] . '?\');">' . $row['ip_address'] . '</a></td>
                 <td>' . htmlspecialchars($row['user_agent']) . '</td>
                 <td>' . ($row['referrer'] ? htmlspecialchars($row['referrer']) : 'Direct') . '</td>
                 <td>' . $row['visit_time'] . '</td>
                 <td>' . htmlspecialchars($row['page_visited']) . '</td>
+                <td>' . $bot_name . '</td>
+                <td>' . $country . '</td>
+                <td>' . $city . '</td> <!-- Display the city -->
               </tr>';
     }
 
@@ -287,8 +337,8 @@ if ($query && $query->rowCount() > 0) {
     echo '<p>No visitor data available.</p>';
 }
 
-echo '</div>';
-include 'aside.php';
+echo '</div><br />';
+//include 'aside.php';
 include 'template/footer.php';
 ?>
 
@@ -302,13 +352,13 @@ include 'template/footer.php';
         width: 100%;
         border-collapse: collapse;
         font-family: Arial, sans-serif;
-        font-size: 13px; /* Smaller font size */
+        font-size: 13px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     .visitor-table th,
     .visitor-table td {
-        padding: 8px 10px; /* Less padding */
+        padding: 8px 10px;
         text-align: left;
         border-bottom: 1px solid #ddd;
     }
@@ -330,6 +380,10 @@ include 'template/footer.php';
 
     .visitor-table a:hover {
         text-decoration: underline;
+    }
+
+    .visitor-table tr.bot-row {
+        background-color: #fff3cd; /* Light yellow for bots */
     }
 
     @media (max-width: 768px) {
