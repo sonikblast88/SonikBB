@@ -19,7 +19,7 @@ if (isset($_SESSION['is_loged']) && isset($_SESSION['user_info']) && isset($_SES
 
             $form_submit = (int)filter_input(INPUT_POST, 'form_submit');
             if ($form_submit == 1) {
-                $comment = trim(filter_input(INPUT_POST, 'comment')); // Removed addslashes()
+                $comment = trim(filter_input(INPUT_POST, 'comment'));
 
                 // Editing the comment (using prepared statement)
                 $sql_update = "UPDATE comments SET comment = :comment WHERE comment_id = :post_comment_id";
@@ -136,7 +136,7 @@ function formatText(type) {
 }
 
 function insertImage() {
-    const imageUrl = prompt('Please enter the image URL:'); // Translated prompt
+    const imageUrl = prompt('Please enter the image URL:');
     if (imageUrl) {
         const textarea = document.getElementById('comment');
         const start = textarea.selectionStart;
@@ -177,10 +177,10 @@ function uploadImage() {
         })
         .catch(error => {
             console.error('Error uploading image:', error);
-            alert('An error occurred during upload.'); // Translated alert
+            alert('An error occurred during upload.');
         });
     } else {
-        alert('Please select an image to upload.'); // Translated alert
+        alert('Please select an image to upload.');
     }
 }
 </script>
