@@ -64,7 +64,7 @@ if (isset($_SESSION['is_loged']) && $_SESSION['user_info']['type'] == 2) {
 }
 ?>
 
-<hr style="border: 0px;border-top: dotted 1px;"><center>SonikBB Version 0.0.22 Dev</center>
+<hr style="border: 0px;border-top: dotted 1px;"><center>SonikBB Version 0.0.24 Dev</center>
 </div>
 
 </body>
