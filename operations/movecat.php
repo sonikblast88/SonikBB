@@ -1,8 +1,8 @@
 <?php
-include '../functions.php'; // Include your functions file
+include '../functions.php';
 
 if (isset($_GET['cat_id'], $_GET['action']) && ($_GET['action'] == 'up' || $_GET['action'] == 'down')) {
-    $cat_id = (int)$_GET['cat_id']; // Sanitize input
+    $cat_id = (int)$_GET['cat_id']; 
     $action = $_GET['action'];
 
     try {
@@ -42,7 +42,6 @@ if (isset($_GET['cat_id'], $_GET['action']) && ($_GET['action'] == 'up' || $_GET
                 $updateStmt->execute($updateParams);
 
             } else {
-                // Update the database with the new position (prepared statement)
                 $updateStmt = $conn->prepare("UPDATE categories SET position = :newPosition WHERE cat_id = :cat_id");
                 $updateParams = [
                     ':newPosition' => $newPosition,
@@ -51,7 +50,7 @@ if (isset($_GET['cat_id'], $_GET['action']) && ($_GET['action'] == 'up' || $_GET
                 $updateStmt->execute($updateParams);
             }
 
-            $conn->commit(); // Commit the transaction
+            $conn->commit();
             header('Location: ../index.php'); // Redirect after successful update
             exit; // Important to stop further script execution
 
