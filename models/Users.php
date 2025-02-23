@@ -51,4 +51,60 @@ class Users {
 			return false; // Или хвърляне на изключение
 		}
 	}
+	
+    public function updateSignature($userId, $signature) {
+        $query = "UPDATE users SET signature = :signature WHERE user_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':signature', $signature);
+        $stmt->bindParam(':id', $userId);
+        return $stmt->execute();
+    }
+	
+    public function uploadAvatar($userId, $file) {
+        $targetDir = "uploads/";
+        $imageFileType = strtolower(pathinfo($file["name"], PATHINFO_EXTENSION));
+        $randomFileName = uniqid() . "." . $imageFileType; // Генериране на уникално име
+        $targetFile = $targetDir . $randomFileName;
+        $uploadOk = 1;
+
+        // Проверка дали файлът е изображение
+        $check = getimagesize($file["tmp_name"]);
+        if ($check === false) {
+            return "Файлът не е изображение.";
+        }
+
+        // Проверка на размера на файла
+        if ($file["size"] > 500000) {
+            return "Файлът е твърде голям.";
+        }
+
+        // Разрешени формати на файлове
+        if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
+            return "Разрешени са само JPG, JPEG, PNG & GIF файлове.";
+        }
+
+        if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+            $avatarPath = $targetFile;
+            $this->updateAvatar($userId, $avatarPath);
+            return true;
+        } else {
+            return "Имаше грешка при качването на файла.";
+        }
+    }
+
+    public function updateAvatar($userId, $avatarPath) {
+        $query = "UPDATE users SET avatar = :avatar WHERE user_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':avatar', $avatarPath);
+        $stmt->bindParam(':id', $userId);
+        return $stmt->execute();
+    }
+	
+    public function updatePassword($userId, $hashedPassword) {
+        $query = "UPDATE users SET password = :password WHERE user_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':password', $hashedPassword);
+        $stmt->bindParam(':id', $userId);
+        return $stmt->execute();
+    }
 }

@@ -1,10 +1,10 @@
 <?php
 // database.php
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'myforum';
-    private $username = 'root';
-    private $password = '';
+    private $host = DB_HOST;
+    private $db_name = DB_NAME;
+    private $username = DB_USERNAME;
+    private $password = DB_PASSWORD;
     public $conn;
 
     public function __construct() {

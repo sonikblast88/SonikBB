@@ -169,14 +169,14 @@ if (isset($_POST['submit'])) {
                         $config_content .= "define('DB_USERNAME', '$db_username');\n";
                         $config_content .= "define('DB_PASSWORD', '$db_password');\n";
                         $config_content .= "define('DB_NAME', '$db_name');\n\n";
-                        $config_content .= "// Forum path\n";
+                        //$config_content .= "// Forum path\n";
                         $config_content .=  '$path = ' . "'$path';\n\n";
                         $config_content .= "// Other settings\n";
                         $config_content .= "define('WEBSITE', '$website');\n";
                         $config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
                         $config_content .= "define('SITE_TITLE', '$site_title');\n";
-                        $config_content .= "date_default_timezone_set('Europe/Sofia');\n\n";
-                        $config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
+                        //$config_content .= "date_default_timezone_set('Europe/Sofia');\n\n";
+                        //$config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
                         $config_content .= "?>";
 
                         $encoded_content = urlencode($config_content);

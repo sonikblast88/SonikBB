@@ -8,8 +8,6 @@ include_once 'models/Users.php';
 include_once 'models/Topics.php';
 include_once 'template/header.php';
 
-define("WEBSITE", "https://webleit.eu/dev5/");
-
 $database = new Database();
 $db = $database->connect();
 
@@ -154,11 +152,11 @@ $categories = $categoryModel->listCategories();
         if (isset($_SESSION['is_loged'])) {
             if ($_SESSION['type'] == 2) {
                 $type = '<div id="profile-info"><b>Type:</b> Administrator</div>';
-                $stats = '<div id="profile-info"><b>» <a href="/stats.php">Forums Stats</a></b></div>';
+                $stats = '<div id="profile-info"><b>» <a href="stats.php">Forums Stats</a></b></div>';
             }
 
             echo '<div id="last-topics-topic-header">» P R O F I L E</div>';
-            echo '<img src="/' . htmlspecialchars($_SESSION['avatar']) . '" alt="" id="profile-image" />';
+            echo '<img src="' . htmlspecialchars($_SESSION['avatar']) . '" alt="" id="profile-image" />';
             echo '<div id="profile-info"><b>Name:</b> ' . htmlspecialchars($_SESSION['username']) . '</div>';
             echo $type;
             echo $stats;

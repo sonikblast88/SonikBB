@@ -110,7 +110,9 @@ require_once('template/header.php');
 <p><?= $topic['topic_desc'] ?></p>
 </div>
 
+<?php if(isUserOrAdmin()): ?>
 <br/><center><a href = "add_comment.php?topic_id=<?= $topic_id ?>"><img src = "template/images/comment.png" alt = "" /></a></center>
+<?php endif; ?>
 
     <?php foreach ($comments as $comment): ?>
 		<div style="width: 92%; border: 1px solid black; margin: 0 auto;padding:15px;padding-top: 0px;margin-top: 20px;box-shadow: 0 0 8px rgba(0, 0, 0, .8);border-radius: 5px;overflow: hidden;">
