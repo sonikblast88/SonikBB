@@ -107,4 +107,11 @@ class Users {
         $stmt->bindParam(':id', $userId);
         return $stmt->execute();
     }
+	
+    public function updateLastLogin($user_id) {
+	$query = "UPDATE users SET last_login = NOW() WHERE user_id = :user_id";
+	$stmt = $this->conn->prepare($query);
+	$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+	return $stmt->execute();
+    }
 }
