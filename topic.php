@@ -16,6 +16,7 @@ $topicsModel = new Topics($db);
 $categoryModel = new Category($db);
 $usersModel = new Users($db);
 $commentsModel = new Comments($db);
+$parsedown = new Parsedown();
 
 // Проверка за администратор
 $is_admin = isAdmin();
@@ -27,7 +28,7 @@ $isUserOrAdmin = isUserOrAdmin();
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 
 // Извличане на информация за темата
-$topic = $topicsModel->showPost($topic_id);
+$topic = $topicsModel->getTopicById($topic_id);
 
 // Извличане на информация за потребителя, който е създал темата
 $user = $usersModel->getUserById($topic['topic_author']);
@@ -107,7 +108,7 @@ require_once('template/header.php');
 
 <!-- Показване на информация за темата -->
 
-<p><?= $topic['topic_desc'] ?></p>
+<p><?= $parsedown->text($topic['topic_desc']) ?></p>
 </div>
 
 <?php if(isUserOrAdmin()): ?>
@@ -143,7 +144,7 @@ require_once('template/header.php');
 			</div>
 			<!-- PROFILE PART END -->
 			
-            <p><?= $comment['comment'] ?></p>
+            <p><?= $parsedown->text($comment['comment']); ?></p>
         </div>
     <?php endforeach; ?>
 <br>
