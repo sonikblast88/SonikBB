@@ -86,6 +86,7 @@ require_once('template/header.php');
 		<img src="<?= $user['avatar'] ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />
 		<div>
 		<div>Username: <?= $user['username'] ?></div>
+		<div>Type: <?= $user['type'] == 2 ? 'Admin' : 'User' ?></div>
 		<div>Signature: <?= $user['signature'] ?></div>
 		</div>
 	</div>
@@ -125,6 +126,7 @@ require_once('template/header.php');
 			<img src="<?= $commentAuthor['avatar'] ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />
 			<div>
 			<div>Username: <?= $commentAuthor['username'] ?></div>
+			<div>Type: <?= $commentAuthor['type'] == 2 ? 'Admin' : 'User' ?></div>
 			<div>Signature: <?= $user['signature'] ?></div>
 			</div>
 			</div>
