@@ -34,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['avatar'] = $user['avatar'];
             $_SESSION['signature'] = $user['signature'];
 
+			// Ъпдейт на last_login
+			$usersModel->updateLastLogin($user['user_id']);
+
             session_regenerate_id(true);
             header("Location: index.php");
             exit;
