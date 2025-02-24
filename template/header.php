@@ -6,12 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="<?php echo WEBSITE_DESC; ?>">
-	
-	<script>
-	function confirmDelete() {
-		return confirm("Are you sure you want to delete?");
-	}
-	</script>
 </head>
 <body>
 <div id="container">
