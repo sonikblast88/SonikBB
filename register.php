@@ -92,13 +92,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($row = $login_stmt->fetch(PDO::FETCH_ASSOC)) {
                         if (password_verify($password, $row['password'])) { // Password check
 							$_SESSION['is_loged'] = true;
-							$_SESSION['user_id'] = $user['user_id'];
-							$_SESSION['username'] = $user['username'];
+							$_SESSION['user_id'] = $row['user_id'];
+							$_SESSION['username'] = $row['username']; 
 							$_SESSION['type'] = (int)'1'; // 1 - user, 2 - admin
 							$_SESSION['avatar'] = 'uploads/avatar-default.avif';
 							$_SESSION['signature'] = $user['signature'];
 
-							//session_regenerate_id(true); // Регенерация на идентификатора на сесията
+							session_regenerate_id(true); // Регенерация на идентификатора на сесията
 
                             $update_login_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
                             $update_login_stmt = $conn->prepare($update_login_sql);

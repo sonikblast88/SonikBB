@@ -61,7 +61,7 @@ if (!isset($_SESSION['is_loged']) || $_SESSION['type'] != 2) {
 }
 ?>
 <hr style="border: 0px;border-top: dotted 1px;">
-<center>SonikBB Version 0.1.01 Dev</center>
+<center>SonikBB Version 0.1.02 Dev</center>
 </div>
 </body>
 </html>
