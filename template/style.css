@@ -360,3 +360,23 @@ input[type="button"]:hover {
     background-color: #007bff;
     color: white;
 }
+
+/* --------------------------------------------------------------------------------------- */
+/* --------------- WORKING WITH PAGINATION [ 1 ] [ 2 ] [ 3 ] ----------------------------- */
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+}
