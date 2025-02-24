@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
     $db_username = $_POST['db_username'];
     $db_password = $_POST['db_password'];
     $db_name = $_POST['db_name'];
-    $path = $_POST['path'];
+    //$path = $_POST['path'];
     $site_title = $_POST['site_title'];
     $website = $_POST['website'];
     $websitedesc = $_POST['websitedesc'];
@@ -170,7 +170,7 @@ if (isset($_POST['submit'])) {
                         $config_content .= "define('DB_PASSWORD', '$db_password');\n";
                         $config_content .= "define('DB_NAME', '$db_name');\n\n";
                         //$config_content .= "// Forum path\n";
-                        $config_content .=  '$path = ' . "'$path';\n\n";
+                        //$config_content .=  '$path = ' . "'$path';\n\n";
                         $config_content .= "// Other settings\n";
                         $config_content .= "define('WEBSITE', '$website');\n";
                         $config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
@@ -295,10 +295,7 @@ if (isset($_POST['submit'])) {
 
         <label for="db_name">Database Name:</label><br>
         <input type="text" name="db_name" id="db_name" value="<?php echo htmlspecialchars($db_name); ?>" required><br><br>
-
-        <label for="path">Forum Path (e.g., ./ or /sonikbb/):</label><br>
-        <input type="text" name="path" id="path" value="<?php echo htmlspecialchars($path); ?>" required><br><br>
-
+		
         <label for="site_title">Site Title:</label><br>
         <input type="text" name="site_title" id="site_title" value="<?php echo htmlspecialchars($site_title); ?>" required><br><br>
 

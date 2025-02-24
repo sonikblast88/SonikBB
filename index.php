@@ -2,6 +2,12 @@
 // index.php
 session_start();
 
+// Проверка за празен config.php
+if (filesize('core/config.php') === 0) {
+    header('Location: install/index.php');
+    exit;
+}
+
 include_once 'core/autoload.php';
 include_once 'models/Category.php';
 include_once 'models/Users.php';
@@ -10,6 +16,12 @@ include_once 'template/header.php';
 
 $database = new Database();
 $db = $database->connect();
+
+// Проверка за успешна връзка с базата данни
+if (!$db) {
+    echo "Грешка при свързване с базата данни. Моля, опитайте по-късно.";
+    exit; // Прекратяване на изпълнението
+}
 
 $categoryModel = new Category($db);
 $topicsModel = new Topics($db);
