@@ -2,10 +2,12 @@
 session_start();
 include_once 'core/autoload.php';
 include_once 'models/Users.php';
+include_once 'models/Topics.php';
 
 $database = new Database();
 $db = $database->connect();
 $usersModel = new Users($db);
+$topicsModel = new Topics($db);
 
 $get_profile_id = filter_input(INPUT_GET, 'profile_id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -92,4 +94,7 @@ include 'template/header.php';
         <button type="submit">Качи аватар</button>
     </form>
 </div>
-<?php include 'template/footer.php'; ?>
+
+<?php 
+include_once('aside.php');
+include_once 'template/footer.php'; 
