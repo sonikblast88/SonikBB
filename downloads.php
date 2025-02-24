@@ -1,9 +1,7 @@
 <?php
+session_start();
 include_once 'core/autoload.php';
 include('template/header.php');
-
-// Дефинирайте EXCLUDED_FILES, ако имате такива, които не искате да се показват
-define('EXCLUDED_FILES', ['.', '..']);
 
 echo '<div style="width: 92%; border: 1px solid black; margin: 0 auto;padding:15px;padding-top: 0px;margin-top: 20px;box-shadow: 0 0 8px rgba(0, 0, 0, .8);border-radius: 5px;overflow: hidden;">';
 echo '<h2>Downloads</h2>';

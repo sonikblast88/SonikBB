@@ -176,7 +176,7 @@ if (isset($_POST['submit'])) {
                         $config_content .= "define('WEBSITE_DESC', '$websitedesc');\n";
                         $config_content .= "define('SITE_TITLE', '$site_title');\n";
                         //$config_content .= "date_default_timezone_set('Europe/Sofia');\n\n";
-                        //$config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
+                        $config_content .= "define('EXCLUDED_FILES', array($excluded_files));\n\n";
                         $config_content .= "?>";
 
                         $encoded_content = urlencode($config_content);
