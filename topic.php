@@ -100,7 +100,7 @@ require_once('template/header.php');
 			if ($isAdmin || $isTopicAuthor):
 			?>
 				<a href="edit_topic.php?topic_id=<?= $topic_id ?>"><button>Edit</button></a>
-				<a href="delete_topic.php?topic_id=<?= $topic_id ?>" onclick="return confirmDeleteTopic()"><button>Delete</button></a>
+				<a href="delete_topic.php?topic_id=<?= $topic_id ?>" onclick="return confirm('Are you sure?')"><button>Delete</button></a>
 			<?php endif; ?>
 	</div>
 </div>
@@ -137,7 +137,7 @@ require_once('template/header.php');
 					if ($isAdmin || $isAuthor):
 					?>
 						<a href="edit_comment.php?comment_id=<?= $comment['comment_id'] ?>&topic_id=<?= $topic_id ?>"><button>Edit</button></a>
-						<a href="delete_comment.php?comment_id=<?= $comment['comment_id'] ?>&topic_id=<?= $topic_id ?>" onclick="return confirmDelete()"><button>Delete</button></a>
+						<a href="delete_comment.php?comment_id=<?= $comment['comment_id'] ?>&topic_id=<?= $topic_id ?>" onclick="return confirm('Are you sure?')"><button>Delete</button></a>
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>
