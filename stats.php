@@ -13,9 +13,9 @@ $db = $database->connect();
 $get_profile_id = filter_input(INPUT_GET, 'profile_id', FILTER_SANITIZE_NUMBER_INT);
 
 // admin check
-$is_admin = false;
-$is_admin = isAdmin();
-if($is_admin != true){
+$is_admin = isAdmin(); 
+
+if (!$is_admin) { 
 		echo "You don't have rights to view this page";
 		exit;
 }
