@@ -87,7 +87,7 @@ if (isset($_GET['content'])) {
 
 <div class="container">
     <h2>Config.php Configuration Preview</h2>
-    <h3>Please copy all the information to your config.php located in the root directory of SonikBB</h3>
+    <h3>Please copy all the information to your CORE/config.php located in the root directory of SonikBB</h3>
     <pre id="config-content"><?php echo htmlspecialchars($config_content); ?></pre>
     <button id="copy-button">Copy Text</button>
     <a href="../index.php">Go To Website</a>
