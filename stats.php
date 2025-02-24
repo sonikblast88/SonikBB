@@ -1,4 +1,7 @@
 <?php
+// THIS PAGE IS JUST FOR FUN AND IS NOT A PART OF THE PROJECT
+// USE AND EDIT ONLY FOR FUN
+
 session_start();
 include_once 'core/autoload.php';
 include_once 'models/Users.php';
@@ -9,8 +12,13 @@ $db = $database->connect();
 
 $get_profile_id = filter_input(INPUT_GET, 'profile_id', FILTER_SANITIZE_NUMBER_INT);
 
-// Проверка дали потребителят е логнат и дали редактира собствения си профил
-
+// admin check
+$is_admin = false;
+$is_admin = isAdmin();
+if($is_admin != true){
+		echo "You don't have rights to view this page";
+		exit;
+}
 
 echo '<div style="width: 92%; border: 1px solid black; margin: 0 auto; padding: 15px; padding-top: 0; margin-top: 20px; box-shadow: 0 0 8px rgba(0, 0, 0, .8); border-radius: 5px; overflow: hidden;">';
 
