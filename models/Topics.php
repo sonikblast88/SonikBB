@@ -12,7 +12,6 @@ class Topics {
 
     public function __construct($db) {
         $this->conn = $db;
-		$this->parsedown = new Parsedown(); // Инициализиране на Parsedown
     }
 
     // Метод за създаване на тема
@@ -89,26 +88,9 @@ class Topics {
 		$stmt->execute();
 
 		return $stmt;
-	}
+	}	
 
-    // Метод за показване на темата с Parsedown
-    public function showPost($topic_id) {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE topic_id = :topic_id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":topic_id", $topic_id, PDO::PARAM_INT);
-        $stmt->execute();
-        $topic = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Филтриране на topic_desc с Parsedown
-        if ($topic) {
-            $parsedown = new Parsedown();
-            $topic['topic_desc'] = $parsedown->text($topic['topic_desc']);
-        }
-
-        return $topic;
-    }
-	
-		// Метод за извличане на тема по ID без Parsedown ( за едит топик )
+	// Метод за извличане на тема по ID без Parsedown ( за едит топик )
 	public function getTopicById($topic_id) {
 		$query = "SELECT * FROM " . $this->table_name . " WHERE topic_id = :topic_id";
 		$stmt = $this->conn->prepare($query);
