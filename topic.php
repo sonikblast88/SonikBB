@@ -27,7 +27,7 @@ $isUserOrAdmin = isUserOrAdmin();
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 
 // Извличане на информация за темата
-$topic = $topicsModel->getTopicById($topic_id);
+$topic = $topicsModel->showPost($topic_id);
 
 // Извличане на информация за потребителя, който е създал темата
 $user = $usersModel->getUserById($topic['topic_author']);

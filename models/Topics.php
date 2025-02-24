@@ -91,8 +91,8 @@ class Topics {
 		return $stmt;
 	}
 
-    // Метод за извличане на тема по ID
-    public function getTopicById($topic_id) {
+    // Метод за показване на темата с Parsedown
+    public function showPost($topic_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE topic_id = :topic_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":topic_id", $topic_id, PDO::PARAM_INT);
@@ -107,6 +107,17 @@ class Topics {
 
         return $topic;
     }
+	
+		// Метод за извличане на тема по ID без Parsedown ( за едит топик )
+	public function getTopicById($topic_id) {
+		$query = "SELECT * FROM " . $this->table_name . " WHERE topic_id = :topic_id";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(":topic_id", $topic_id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		return $stmt->fetch(PDO::FETCH_ASSOC);
+	}
+
 
 	// Метод за актуализиране на тема
 	public function updateTopic($topic_id, $topic_name, $topic_desc) {
