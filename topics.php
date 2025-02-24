@@ -82,7 +82,7 @@ while ($category = $categories->fetch(PDO::FETCH_ASSOC)) {
                 <form method="POST" action="topics.php" style="display:inline;">
                     <input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
                     <input type="hidden" name="parent" value="<?= $cat_id ?>">
-                    <button type="submit" name="delete_topic" onclick="return confirmDelete()">Delete</button>
+                    <button type="submit" name="delete_topic" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>
 
                 <form method="POST" action="topics.php" style="display:inline;">
