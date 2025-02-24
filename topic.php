@@ -88,6 +88,7 @@ require_once('template/header.php');
 		<div>Username: <?= $user['username'] ?></div>
 		<div>Type: <?= $user['type'] == 2 ? 'Admin' : 'User' ?></div>
 		<div>Signature: <?= $user['signature'] ?></div>
+		<div>Last active: <?= date('Y-m-d H:i', strtotime($user['last_login'])) ?></div>
 		</div>
 	</div>
 	<div style="display: flex; flex-direction: column; padding-right: 10px;">
@@ -128,6 +129,7 @@ require_once('template/header.php');
 			<div>Username: <?= $commentAuthor['username'] ?></div>
 			<div>Type: <?= $commentAuthor['type'] == 2 ? 'Admin' : 'User' ?></div>
 			<div>Signature: <?= $user['signature'] ?></div>
+			<div>Last active: <?= date('Y-m-d H:i', strtotime($commentAuthor['last_login'])) ?></div>
 			</div>
 			</div>
 			<div style="display: flex; flex-direction: column; padding-right: 10px;">
