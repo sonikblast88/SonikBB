@@ -135,7 +135,7 @@ class Topics {
 		return $stmt;
 	}
 	public function getTopicsByCategoryPaginated($parent, $limit, $offset) {
-		$query = "SELECT t.topic_id, t.topic_name, t.topic_desc, u.username AS author_name 
+		$query = "SELECT t.topic_id, t.topic_name, t.topic_desc, u.username AS author_name, date_added_topic 
 				  FROM " . $this->table_name . " t
 				  LEFT JOIN users u ON t.topic_author = u.user_id
 				  WHERE t.parent = :parent 
