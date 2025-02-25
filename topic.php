@@ -114,8 +114,12 @@ require_once('template/header.php');
 <p><?= $parsedown->text($topic['topic_desc']) ?></p>
 </div>
 
-<?php if(isUserOrAdmin()): ?>
-<br/><center><a href = "add_comment.php?topic_id=<?= $topic_id ?>"><img src = "template/images/comment.png" alt = "" /></a></center>
+<?php if (isUserOrAdmin()): ?>
+    <br/><center><a href="add_comment.php?topic_id=<?= $topic_id ?>"><img src="template/images/comment.png" alt="" /></a></center>
+<?php else: ?>
+    <br/><center>
+        If you want to comment: <a href="login.php">Login</a> or <a href="register.php">Register</a>
+    </center>
 <?php endif; ?>
 
     <?php foreach ($comments as $comment): ?>
