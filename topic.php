@@ -88,8 +88,8 @@ require_once('template/header.php');
 		<div>Username: <?= $user['username'] ?></div>
 		<div>Type: <?= $user['type'] == 2 ? 'Admin' : 'User' ?></div>
 		<div>Signature: <?= $user['signature'] ?></div>
-		<div>Last active: <?= date('Y-m-d H:i', strtotime($user['last_login'])) ?></div>
-		<div>Created: <?= date('Y-m-d H:i:s', strtotime($topic['date_added_topic'])) ?></div>
+		<div>Last active: <?= date('d-m-Y', strtotime($user['last_login'])) ?></div>
+		<div>Created: <?= date('d-m-Y', strtotime($topic['date_added_topic'])) ?></div>
 		</div>
 	</div>
 	<div style="display: flex; flex-direction: column; padding-right: 10px;">
@@ -134,8 +134,8 @@ require_once('template/header.php');
 			<div>Username: <?= $commentAuthor['username'] ?></div>
 			<div>Type: <?= $commentAuthor['type'] == 2 ? 'Admin' : 'User' ?></div>
 			<div>Signature: <?= $user['signature'] ?></div>
-			<div>Last active: <?= date('Y-m-d H:i', strtotime($commentAuthor['last_login'])) ?></div>
-			<div>Commented: <?= date('Y-m-d H:i:s', strtotime($comment['date_added_comment'])) ?></div>
+			<div>Last active: <?= date('d-m-Y', strtotime($commentAuthor['last_login'])) ?></div>
+			<div>Commented: <?= date('d-m-Y', strtotime($comment['date_added_comment'])) ?></div>
 			</div>
 			</div>
 			<div style="display: flex; flex-direction: column; padding-right: 10px;">
