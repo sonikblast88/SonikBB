@@ -138,6 +138,8 @@ ALTER TABLE `visitors`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
+ALTER TABLE `users` ADD `created` DATE NOT NULL AFTER `email`;
+
 INSERT INTO `categories` (`position`, `cat_name`, `cat_desc`)
 VALUES (1, 'Your first category', 'With a simple description text');
 
