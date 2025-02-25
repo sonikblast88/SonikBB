@@ -59,6 +59,16 @@ if (!isset($_SESSION['is_loged']) || $_SESSION['type'] != 2) {
         ':page_visited' => $_SERVER['REQUEST_URI']
     ]);
 }
+
+$uptime_output = shell_exec('uptime -p');
+
+if ($uptime_output) {
+    echo '<br/>» Server Uptime: <b>' . htmlspecialchars(trim($uptime_output), ENT_QUOTES) . '</b><br/>';
+} else {
+    echo '<br/>» Server Uptime: Cannot be requested!<br/>';
+}
+
+
 ?>
 <hr style="border: 0px;border-top: dotted 1px;">
 <center>SonikBB Version 0.1.10 Dev</center>
