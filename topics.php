@@ -70,10 +70,12 @@ while ($category = $categories->fetch(PDO::FETCH_ASSOC)) {
     <div id="topic">
         <?php while ($row = $topics->fetch(PDO::FETCH_ASSOC)): ?>
             <div id="list-topics">
-                » <a href="topic.php?topic_id=<?= $row['topic_id'] ?>"><?= htmlspecialchars($row['topic_name']) ?></a> By <?= htmlspecialchars($row['author_name']) ?>
+                » <a href="topic.php?topic_id=<?= $row['topic_id'] ?>"><?= htmlspecialchars($row['topic_name']) ?></a> 
+				<hr style="border: none;border-bottom: dashed 1px #000000;">
+				- <small>Added by: <?= htmlspecialchars($row['author_name']) ?> on: <?= htmlspecialchars($row['date_added_topic']) ?></small>
 				
 				<?php if ($is_admin): ?>
-				<hr style="border: none;border-bottom: dashed 1px #000000;">
+				
                 <form method="GET" action="edit_topic.php" style="display:inline;">
                     <input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
                     <button type="submit">Edit</button>
