@@ -16,7 +16,7 @@ class Topics {
 
     // Метод за създаване на тема
     public function createTopic($parent, $topic_name, $topic_desc, $topic_author) {
-        $query = "INSERT INTO " . $this->table_name . " (parent, topic_name, topic_desc, topic_author) VALUES (:parent, :topic_name, :topic_desc, :topic_author)";
+        $query = "INSERT INTO " . $this->table_name . " (parent, topic_name, topic_desc, topic_author, date_added_topic) VALUES (:parent, :topic_name, :topic_desc, :topic_author, now())";
         $stmt = $this->conn->prepare($query);
 
         // Почистване на входните данни
