@@ -1,6 +1,19 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo "Трябва да сте логнат за да коментирате.";
+    exit;
+}
+
+$topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
+if ($topic_id <= 0) {
+    http_response_code(400);
+    echo "Невалидно ID на тема.";
+    exit;
+}
+
 include_once 'core/autoload.php';
 include_once 'models/Comments.php';
 
