@@ -156,4 +156,11 @@ class Topics {
 		$stmt->execute();
 		return $stmt->fetchColumn();
 	}
+	public function getCommentCountByTopicId($topic_id) {
+		$query = "SELECT COUNT(*) FROM comments WHERE topic_id = :topic_id";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(':topic_id', $topic_id);
+		$stmt->execute();
+		return $stmt->fetchColumn();
+	}
 }
