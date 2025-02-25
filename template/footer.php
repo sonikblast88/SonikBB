@@ -71,7 +71,7 @@ if ($uptime_output) {
 
 ?>
 <hr style="border: 0px;border-top: dotted 1px;">
-<center>SonikBB Version 0.1.10 Dev</center>
+<center>SonikBB Version 0.1.11 Dev</center>
 </div>
 </body>
 </html>
