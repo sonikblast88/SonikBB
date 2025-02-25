@@ -36,7 +36,7 @@ public function getCommentsByTopicId($topic_id) {
 
     // Метод за добавяне на коментар
     public function addComment($topic_id, $comment, $comment_author) {
-        $query = "INSERT INTO " . $this->table_name . " (topic_id, comment, comment_author) VALUES (:topic_id, :comment, :comment_author)";
+        $query = "INSERT INTO " . $this->table_name . " (topic_id, comment, comment_author, date_added_comment) VALUES (:topic_id, :comment, :comment_author, now())";
         $stmt = $this->conn->prepare($query);
 
         // Почистване на входните данни
