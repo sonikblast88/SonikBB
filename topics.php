@@ -74,29 +74,33 @@ while ($category = $categories->fetch(PDO::FETCH_ASSOC)) {
 				<hr style="border: none;border-bottom: dashed 1px #000000;">
 				- <small>Added by: <?= htmlspecialchars($row['author_name']) ?> on: <?= htmlspecialchars($row['date_added_topic']) ?></small>
 				
-				<?php if ($is_admin): ?>
-				
-                <form method="GET" action="edit_topic.php" style="display:inline;">
-                    <input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
-                    <button type="submit">Edit</button>
-                </form>
+					<div style="float:right;">
+					<?php if ($is_admin): ?>
+					
+					<form method="GET" action="edit_topic.php" style="display:inline;">
+						<input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
+						<button type="submit">Edit</button>
+					</form>
 
-                <form method="POST" action="topics.php" style="display:inline;">
-                    <input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
-                    <input type="hidden" name="parent" value="<?= $cat_id ?>">
-                    <button type="submit" name="delete_topic" onclick="return confirm('Are you sure?')">Delete</button>
-                </form>
+					<form method="POST" action="topics.php" style="display:inline;">
+						<input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
+						<input type="hidden" name="parent" value="<?= $cat_id ?>">
+						<button type="submit" name="delete_topic" onclick="return confirm('Are you sure?')">Delete</button>
+					</form>
 
-                <form method="POST" action="topics.php" style="display:inline;">
-                    <input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
-                    <select name="new_parent" required>
-                        <?php foreach ($categoriesList as $category): ?>
-                            <option value="<?= $category['cat_id'] ?>"><?= $category['cat_name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <button type="submit" name="move_topic">Move</button>
-                </form>
-				<?php endif; ?>
+					<form method="POST" action="topics.php" style="display:inline;">
+						<input type="hidden" name="topic_id" value="<?= $row['topic_id'] ?>">
+						<select name="new_parent" required>
+							<?php foreach ($categoriesList as $category): ?>
+								<option value="<?= $category['cat_id'] ?>"><?= $category['cat_name'] ?></option>
+							<?php endforeach; ?>
+						</select>
+						<button type="submit" name="move_topic">Move</button>
+					</form>
+					<?php endif; ?>
+					</div>
+					<div style="clear: both;"></div>
+					
             </div>
         <?php endwhile; ?>
 
