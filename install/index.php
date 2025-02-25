@@ -84,8 +84,8 @@ if (isset($_POST['submit'])) {
 
                 if (empty($errors)) {
                     // Insert admin user
-                    $insert_admin_sql = "INSERT INTO `users` (`username`, `password`, `type`, `last_login`, `email`)
-                                        VALUES ('$admin_username', '$admin_password', 2, NOW(), 'admin@example.com')"; // You might want to add an email field to the form
+                    $insert_admin_sql = "INSERT INTO `users` (`username`, `password`, `type`, `last_login`, `email`, `created`)
+                                        VALUES ('$admin_username', '$admin_password', 2, NOW(), 'admin@example.com', NOW())"; // You might want to add an email field to the form
                     if (!mysqli_query($conn, $insert_admin_sql)) {
                         $errors[] = "Error inserting admin user: " . mysqli_error($conn);
                         mysqli_rollback($conn);
