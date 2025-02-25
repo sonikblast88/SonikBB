@@ -2,6 +2,19 @@
 // add_topic.php
 session_start();
 
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo "Трябва да сте логнат за да добавите тема.";
+    exit;
+}
+
+$cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : 0;
+if ($cat_id <= 0) {
+    http_response_code(400);
+    echo "Невалидно ID на категория.";
+    exit;
+}
+
 include_once 'core/autoload.php';
 include_once 'models/Topics.php';
 
