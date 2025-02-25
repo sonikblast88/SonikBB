@@ -139,12 +139,14 @@ ALTER TABLE `visitors`
 COMMIT;
 
 ALTER TABLE `users` ADD `created` DATE NOT NULL AFTER `email`;
+ALTER TABLE `topics` ADD `date_added_topic` DATE NOT NULL AFTER `topic_author`; 
+ALTER TABLE `comments` ADD `date_added_comment` DATE NOT NULL AFTER `comment_author`; 
 
 INSERT INTO `categories` (`position`, `cat_name`, `cat_desc`)
 VALUES (1, 'Your first category', 'With a simple description text');
 
-INSERT INTO `topics` (`parent`, `topic_name`, `topic_desc`, `topic_author`)
-VALUES (1, 'The firs topic of this forum', 'just a simple topic description', 1); -- the id of the admin 1
+INSERT INTO `topics` (`parent`, `topic_name`, `topic_desc`, `topic_author`, `date_added_topic`)
+VALUES (1, 'The firs topic of this forum', 'just a simple topic description', 1, now()); -- the id of the admin 1
 
-INSERT INTO `comments` (`topic_id`, `comment`, `comment_author`)
-VALUES (1, 'Hello dear visitor', 1); -- Заменете 1 с ID на създадения администратор и ID на създадения форум
+INSERT INTO `comments` (`topic_id`, `comment`, `comment_author`, `date_added_comment`)
+VALUES (1, 'Hello dear visitor', 1, now()); -- Заменете 1 с ID на създадения администратор и ID на създадения форум
