@@ -46,8 +46,20 @@ include('template/header.php');
 
 <!-- Form for editing a topic -->
 <form method="POST" action="edit_topic.php?topic_id=<?= $topic_id ?>">
-    <label for="topic_name"><h2>Edit Topic</h2></label>
-    <input type="text" name="topic_name" value="<?= htmlspecialchars($topic['topic_name']) ?>" size="98" placeholder="Topic Name" required>
+	<label for="topic_name"><h2>Edit Topic</h2></label>
+	<div class="input-container">
+		<button type="button" onclick="insertIntoTitle('📢 ')">📢</button>
+		<button type="button" onclick="insertIntoTitle('📝 ')">📝</button>
+		<button type="button" onclick="insertIntoTitle('🔗 ')">🔗</button>
+		<button type="button" onclick="insertIntoTitle('📎 ')">📎</button>
+		<button type="button" onclick="insertIntoTitle('🖼️ ')">🖼️</button>
+		<button type="button" onclick="insertIntoTitle('💬 ')">💬</button>
+		<button type="button" onclick="insertIntoTitle('📌 ')">📌</button>
+		<button type="button" onclick="insertIntoTitle('⚡ ')">⚡</button>
+		<button type="button" onclick="insertIntoTitle('🚀 ')">🚀</button>
+		<button type="button" onclick="insertIntoTitle('✅ ')">✅</button>
+		<input type="text" name="topic_name" id="topic_name" value="<?= htmlspecialchars($topic['topic_name']) ?>" size="98" placeholder="Topic Name" required>
+	</div>
 
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
@@ -71,6 +83,14 @@ include('template/header.php');
         <button type="button" onclick="closeFileUpload()">Cancel</button>
     </div>
 </form>
+
+<script>
+function insertIntoTitle(text) {
+    const inputField = document.getElementById('topic_name');
+    inputField.value += text;  // Adds the emoji to the input field
+    inputField.focus();  // Keeps the cursor active in the input field
+}
+</script>
 
 <script>
 function formatText(type) {
