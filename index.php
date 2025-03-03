@@ -8,11 +8,11 @@ if (filesize('core/config.php') === 0) {
     exit;
 }
 
-include_once 'core/autoload.php';
-include_once 'models/Category.php';
-include_once 'models/Users.php';
-include_once 'models/Topics.php';
-include_once 'template/header.php';
+require_once 'core/autoload.php';
+require_once 'models/Category.php';
+require_once 'models/Users.php';
+require_once 'models/Topics.php';
+require_once 'template/header.php';
 
 $database = new Database();
 $db = $database->connect();

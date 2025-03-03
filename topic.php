@@ -83,13 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- PROFILE PART START -->
     <div style="width: 99%; border: 1px solid black; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 0 8px rgba(0, 0, 0, .8); border-radius: 5px;">
         <div style="display: flex; align-items: center;">
-            <img src="<?= htmlspecialchars($user['avatar']) ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />
+            <img src="<?= htmlspecialchars($user['avatar']) ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px; margin-left:12px;" />
             <div>
-                <div>Username: <?= htmlspecialchars($user['username']) ?></div>
-                <div>Type: <?= $user['type'] == 2 ? 'Admin' : 'User' ?></div>
-                <div>Signature: <?= htmlspecialchars($user['signature']) ?></div>
-                <div>Last active: <?= date('d M Y \a\t H:i', strtotime($user['last_login'])) ?></div>
-                <div>Created: <?= date('d M Y \a\t H:i', strtotime($topic['date_added_topic'])) ?></div>
+                <div>👤 Username: <?= htmlspecialchars($user['username']) ?></div>
+                <div><?= $user['type'] == 2 ? '🔴 Admin' : '🔵 User' ?></div>
+                <div>✍️ Signature: <?= htmlspecialchars($user['signature']) ?></div>
+                <div>⏳ Last active: <?= date('d M Y \a\t H:i', strtotime($user['last_login'])) ?></div>
+                <div>📅 Created: <?= date('d M Y \a\t H:i', strtotime($topic['date_added_topic'])) ?></div>
             </div>
         </div>
         <div style="display: flex; flex-direction: column; padding-right: 10px;">
@@ -128,13 +128,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- PROFILE PART START -->
         <div style="width: 99%; border: 1px solid black; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 0 8px rgba(0, 0, 0, .8); border-radius: 5px;">
             <div style="display: flex; align-items: center;">
-                <img src="<?= htmlspecialchars($commentAuthor['avatar']) ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px;" />
+                <img src="<?= htmlspecialchars($commentAuthor['avatar']) ?>" alt="" id="post-profile-image" style="margin-right: 10px; max-width: 150px; max-height: 150px; margin-left:12px;" />
                 <div>
-                    <div>Username: <?= htmlspecialchars($commentAuthor['username']) ?></div>
-                    <div>Type: <?= $commentAuthor['type'] == 2 ? 'Admin' : 'User' ?></div>
-                    <div>Signature: <?= htmlspecialchars($commentAuthor['signature']) ?></div>
-                    <div>Last active: <?= date('d M Y \a\t H:i', strtotime($commentAuthor['last_login'])) ?></div>
-                    <div>Commented: <?= date('d M Y \a\t H:i', strtotime($comment['date_added_comment'])) ?></div>
+                    <div>👤 Username: <?= htmlspecialchars($commentAuthor['username']) ?></div>
+                    <div><?= $commentAuthor['type'] == 2 ? '🔴 Admin' : '🔵 User' ?></div>
+                    <div>✍️ Signature: <?= htmlspecialchars($commentAuthor['signature']) ?></div>
+                    <div>⏳ Last active: <?= date('d M Y \a\t H:i', strtotime($commentAuthor['last_login'])) ?></div>
+                    <div>📅 Commented: <?= date('d M Y \a\t H:i', strtotime($comment['date_added_comment'])) ?></div>
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; padding-right: 10px;">

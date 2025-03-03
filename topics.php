@@ -72,9 +72,9 @@ while ($category = $categories->fetch(PDO::FETCH_ASSOC)) {
         <?php else: ?>
             <?php while ($row = $topics->fetch(PDO::FETCH_ASSOC)): ?>
                 <div id="list-topics">
-                    » <a href="topic.php?topic_id=<?= $row['topic_id'] ?>&cat_id=<?= $cat_id ?>"><?= htmlspecialchars($row['topic_name']) ?></a>
+                    📝 <a href="topic.php?topic_id=<?= $row['topic_id'] ?>&cat_id=<?= $cat_id ?>"><?= htmlspecialchars($row['topic_name']) ?></a>
                     <hr style="border: none; border-bottom: dashed 1px #000000;">
-                    - <small>Added by: <?= htmlspecialchars($row['author_name']) ?> on: <?= htmlspecialchars($row['date_added_topic']) ?> with: ( <?= $topicsModel->getCommentCountByTopicId($row['topic_id']) ?> ) comments</small>
+                    📅 <small>Added by: <b><?= htmlspecialchars($row['author_name']) ?></b> on: <?= htmlspecialchars($row['date_added_topic']) ?> with: ( <?= $topicsModel->getCommentCountByTopicId($row['topic_id']) ?> ) comments</small>
                     
                     <div style="float:right;">
                         <?php if ($is_admin): ?>
