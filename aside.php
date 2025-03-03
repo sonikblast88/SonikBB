@@ -35,11 +35,14 @@
         <div id="last-topics-topic-header">» L A S T - T O P I C S</div>
         <?php
         // Retrieve and display the last topics
-        $lastTopics = $topicsModel->getLastTopics();
-        while ($row = $lastTopics->fetch(PDO::FETCH_ASSOC)): ?>
-            <div id="last-topics-topic">
-                📝 <a href="topic.php?topic_id=<?= $row['topic_id'] ?>"><?= htmlspecialchars($row['topic_name']) ?></a> (<?= htmlspecialchars($row['category_name']) ?>)
-            </div>
-        <?php endwhile; ?>
+		$lastTopics = $topicsModel->getLastTopics();
+		while ($row = $lastTopics->fetch(PDO::FETCH_ASSOC)): ?>
+			<div id="last-topics-topic">
+				📝 <a href="topic.php?topic_id=<?= $row['topic_id'] ?>">
+					<?= htmlspecialchars($row['topic_name']) ?>
+				</a> (<?= htmlspecialchars($row['category_name']) ?>)  
+				<span class="topic-date">📅 <?= date("d M Y H:i", strtotime($row['date_added_topic'])) ?></span>
+			</div>
+		<?php endwhile; ?>
     </div>
 </div>
