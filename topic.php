@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <a href="topics.php?cat_id=<?= $cat_id ?>" style="display:block; text-align:center; margin-top:20px;">&larr; Back to Topics</a>
 
 <div style="width: 92%; border: 1px solid black; margin: 0 auto; padding:15px; padding-top: 0px; margin-top: 20px; box-shadow: 0 0 8px rgba(0, 0, 0, .8); border-radius: 5px; overflow: hidden;">
-    <h2><?= htmlspecialchars($topic['topic_name']) ?></h2>
+    <h2><?= htmlspecialchars($topic['topic_name']) ?> 👀 <small>Viewed: <?= $topicsModel->getVisitCountByTopicId($topic_id) ?> times</small></h2></h2>
 
     <!-- PROFILE PART START -->
     <div style="width: 99%; border: 1px solid black; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 0 8px rgba(0, 0, 0, .8); border-radius: 5px;">

@@ -75,7 +75,7 @@ while ($category = $categories->fetch(PDO::FETCH_ASSOC)) {
                     📝 <a href="topic.php?topic_id=<?= $row['topic_id'] ?>&cat_id=<?= $cat_id ?>"><?= htmlspecialchars($row['topic_name']) ?></a>
                     <hr style="border: none; border-bottom: dashed 1px #000000;">
                     📅 <small>Added by: <b><?= htmlspecialchars($row['author_name']) ?></b> on: <?= htmlspecialchars($row['date_added_topic']) ?> with: ( <?= $topicsModel->getCommentCountByTopicId($row['topic_id']) ?> ) comments</small>
-                    
+                    👀 <small>Viewed: <?= $topicsModel->getVisitCountByTopicId($row['topic_id']) ?> times</small>
                     <div style="float:right;">
                         <?php if ($is_admin): ?>
                             <form method="GET" action="edit_topic.php" style="display:inline;">

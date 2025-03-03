@@ -119,18 +119,19 @@ class Topics {
     }
 
     // Method to retrieve the latest topics with a limit
-    public function getLastTopics($limit = 5) {
-        $query = "SELECT t.topic_id, t.topic_name, t.topic_desc, u.username AS author_name, c.cat_name AS category_name, c.cat_id AS category_id
-                  FROM " . $this->table_name . " t
-                  LEFT JOIN users u ON t.topic_author = u.user_id
-                  LEFT JOIN categories c ON t.parent = c.cat_id
-                  ORDER BY t.topic_id DESC
-                  LIMIT :limit";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt;
-    }
+	public function getLastTopics($limit = 5) {
+		$query = "SELECT t.topic_id, t.topic_name, t.topic_desc, t.date_added_topic, 
+						 u.username AS author_name, c.cat_name AS category_name, c.cat_id AS category_id
+				  FROM " . $this->table_name . " t
+				  LEFT JOIN users u ON t.topic_author = u.user_id
+				  LEFT JOIN categories c ON t.parent = c.cat_id
+				  ORDER BY t.topic_id DESC
+				  LIMIT :limit";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+		$stmt->execute();
+		return $stmt;
+	}
 
     // Method to retrieve topics for a given category with pagination
     public function getTopicsByCategoryPaginated($parent, $limit, $offset) {
@@ -164,6 +165,17 @@ class Topics {
         $stmt->bindParam(':topic_id', $topic_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchColumn();
+    }
+
+	//method to calculate number of times a page has been viewed
+    public function getVisitCountByTopicId($topic_id) {
+        $query = "SELECT COUNT(*) FROM visitors WHERE page_visited LIKE :page_visited";
+        $stmt = $this->conn->prepare($query);
+        $page_visited = "%topic.php?topic_id=" . $topic_id . "%"; // Образец за URL на страницата
+        $stmt->bindParam(':page_visited', $page_visited);
+        $stmt->execute();
+
+        return $stmt->fetchColumn(); // Връща броя на посещенията
     }
 }
 ?>
