@@ -20,12 +20,9 @@ SonikBB is a lightweight and fast forum written in PHP. It is designed to be eas
 2.  Point your browser to http://websitename.com/install
 3.  Follow the instructions
 4.  Copy the installer config.php to the sonikbb root directory /CORE/config.php
-5.  (/VAR/WWW/SONIKBB/CORE/CONFIG.PHP
 6.  Go to your new website and have fun
 7.  chmod 777 uploads && uploads/versions && download_counts.txt
 8.  remove install folder after install
-
-( simple tutorial with pictures here https://sonikbb.eu/topic.php?topic_id=114&cat_id=46 )
 
 ## Upgrade
 
