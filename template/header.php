@@ -14,6 +14,6 @@
     </div>
     <div id="navigation">
         <ul>
-            <li><a href="<?php echo WEBSITE; ?>/index.php">Home</a></li> <li><a href="<?php echo WEBSITE; ?>/downloads.php">Downloads</a></li> <li><a target="_blank" rel="noopener noreferrer" href="https://sonikbb.eu/topic.php?topic_id=113&cat_id=47">About</a></li> </ul>
+            <li><a href="<?php echo WEBSITE; ?>/index.php">Home</a></li> <li><a href="<?php echo WEBSITE; ?>/downloads.php">Downloads</a></li> <li><a target="_blank" rel="noopener noreferrer" href="https://sonikbb.eu/topic.php?topic_id=3">About</a></li> </ul>
     </div>
     <div id="content-container">

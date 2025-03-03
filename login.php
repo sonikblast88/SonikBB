@@ -14,18 +14,20 @@ $categoryModel = new Category($db);
 $topicsModel = new Topics($db);
 $usersModel = new Users($db);
 
-$error = ''; // Дефиниране на празна грешка
+$error = ''; // Define an empty error message
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     $question = filter_input(INPUT_POST, 'question', FILTER_SANITIZE_NUMBER_INT);
 
+    // Validate the question code
     if ((int)$question !== 8) {
-        $error = "Невалиден код на въпрос.";
+        $error = "Invalid question code.";
     } else {
         $user = $usersModel->getUserByUsername($username);
 
+        // Verify username and password
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['is_loged'] = true;
             $_SESSION['user_id'] = $user['user_id'];
@@ -34,26 +36,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['avatar'] = $user['avatar'];
             $_SESSION['signature'] = $user['signature'];
 
-			// Ъпдейт на last_login
-			$usersModel->updateLastLogin($user['user_id']);
+            // Update last_login timestamp
+            $usersModel->updateLastLogin($user['user_id']);
 
             session_regenerate_id(true);
             header("Location: index.php");
             exit;
         } else {
-            $error = "Невалидно потребителско име или парола.";
+            $error = "Invalid username or password.";
         }
     }
 }
 ?>
 
 <div id="content">
-    <h2>Вход</h2>
+    <h2>Login</h2>
     <form method="POST" action="login.php">
         <input type="text" name="username" placeholder="Потребителско име" required>
         <input type="password" name="password" placeholder="Парола" required>
 
-        <label for="question"><b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" /></label><br>
+        <label for="question">
+            <b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" />
+        </label><br>
         <input type="text" id="question" name="question" size="50" required><br><br>
 
         <button type="submit">Вход</button>

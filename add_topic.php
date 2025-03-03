@@ -1,17 +1,18 @@
 <?php
-// add_topic.php
 session_start();
 
+// Check if the user is logged in; if not, send a 401 response.
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo "Трябва да сте логнат за да добавите тема.";
+    echo "You must be logged in to add a topic.";
     exit;
 }
 
+// Retrieve and validate the category ID from the URL.
 $cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : 0;
 if ($cat_id <= 0) {
     http_response_code(400);
-    echo "Невалидно ID на категория.";
+    echo "Invalid category ID.";
     exit;
 }
 
@@ -23,32 +24,32 @@ $db = $database->connect();
 
 $topicsModel = new Topics($db);
 
-// Вземане на ID на категорията от URL
-$cat_id = isset($_GET['cat_id']) ? (int)$_GET['cat_id'] : 0;
-
-// Обработка на формата за добавяне на тема
+// Process the form submission for adding a new topic.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parent = $cat_id;
     $topic_name = htmlspecialchars(strip_tags($_POST['topic_name']));
+    // Allow HTML/Markdown in the topic description.
     $topic_desc = $_POST['topic_desc'];
-    $topic_author = $_SESSION['user_id'] ?? 0; // Използване на ID на текущия потребител или 0, ако не е логнат
+    // Use the current user's ID as the topic author.
+    $topic_author = $_SESSION['user_id'] ?? 0;
 
-    if ($topicsModel->createTopic($parent, $topic_name, $topic_desc, $topic_author)) {
-        header("Location: topics.php?cat_id=" . $parent);
+    // Call createTopic, which returns the new topic ID on success.
+    $new_topic_id = $topicsModel->createTopic($parent, $topic_name, $topic_desc, $topic_author);
+    if ($new_topic_id) {
+        header("Location: topic.php?topic_id=" . $new_topic_id);
         exit();
     } else {
-        echo "Грешка при създаване на темата.";
+        echo "Error creating topic.";
     }
 }
 
-include ('template/header.php');
+include('template/header.php');
 ?>
 
 <form method="POST" action="add_topic.php?cat_id=<?= $cat_id ?>" enctype="multipart/form-data">
-	<label for="topic_name"><h2>Add Topic<h2></label>
-
-    <input type="text" name="topic_name"  size="98" placeholder="Topic Name" required>
-	
+    <label for="topic_name"><h2>Add Topic</h2></label>
+    <input type="text" name="topic_name" size="98" placeholder="Topic Name" required>
+    
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
         <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -60,11 +61,11 @@ include ('template/header.php');
         <button type="button" onclick="formatText('quote')">Quote</button>
         <button type="button" onclick="openFileUpload()">Upload Image</button>
     </div>
-	
+    
     <textarea id="topic_desc" name="topic_desc" placeholder="Topic Description" rows="20" cols="102" required></textarea>
     <button type="submit">Add Topic</button>
     <a href="topics.php?cat_id=<?= $cat_id ?>"><button type="button">Cancel</button></a>
-	
+    
     <div id="fileUploadModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid gray;">
         <input type="file" id="imageUpload" name="imageUpload">
         <button type="button" onclick="uploadImage()">Upload</button>
@@ -103,7 +104,7 @@ function formatText(type) {
             if (level && level >= 1 && level <= 6) {
                 formattedText = "#".repeat(level) + " " + selectedText;
             } else {
-                return; 
+                return;
             }
             break;
         case 'list':
@@ -129,7 +130,7 @@ function insertImage() {
     }
 }
 
-// This part is for uploading images, uses ../upload.php and uploads them to the uploads folder
+// Functions for uploading images using upload.php
 function openFileUpload() {
     document.getElementById('fileUploadModal').style.display = 'block';
 }
@@ -161,10 +162,10 @@ function uploadImage() {
         })
         .catch(error => {
             console.error('Error uploading image:', error);
-            alert('An error occurred during upload.'); 
+            alert('An error occurred during upload.');
         });
     } else {
-        alert('Please select an image to upload.'); 
+        alert('Please select an image to upload.');
     }
 }
 </script>

@@ -19,16 +19,16 @@ echo '<div id="content">';
 
 $errors = [];
 
-// Създаване на връзка с базата данни
+// Create a database connection
 $conn = $database->connect();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Валидиране на входните данни
-    $username = filter_input(INPUT_POST, 'username');
+    // Validate input data
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
-    $question = filter_input(INPUT_POST, 'question');
+    $question = filter_input(INPUT_POST, 'question', FILTER_SANITIZE_NUMBER_INT);
 
     if (empty($username)) {
         $errors[] = 'Username is required.';
@@ -52,41 +52,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errors[] = 'Passwords do not match.';
     }
 
+    // If no errors, proceed with registration
     if (empty($errors)) {
-        // Подготовка на данни за вмъкване
+        // Prepare data for insertion
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $signature = "No Signature";
         $last_login = date('Y-m-d H:i:s');
         $created = date('Y-m-d H:i:s');
 
-        // Проверка за съществуващ потребител
+        // Check for existing user by username or email
         $check_sql = "SELECT 1 FROM users WHERE username = :username OR email = :email";
         $check_stmt = $conn->prepare($check_sql);
-        $check_stmt->execute([":username" => $username, ":email" => $email]);
+        $check_stmt->execute([
+            ":username" => $username,
+            ":email" => $email
+        ]);
 
         if ($check_stmt->rowCount() > 0) {
             $errors[] = 'Username or email address already exists.';
         } else {
+            // Validate the question answer
             if ($question != 8) {
-                echo 'wrong question';
+                echo '<div class="error">Wrong question answer.</div>';
             } else {
-                // Вмъкване на нов потребител
-                $insert_sql = "INSERT INTO users (username, email, password, signature, last_login, created) VALUES (:username, :email, :password, :signature, :last_login, :created)";
+                // Insert new user
+                $insert_sql = "INSERT INTO users (username, email, password, signature, last_login, created) 
+                               VALUES (:username, :email, :password, :signature, :last_login, :created)";
                 $insert_stmt = $conn->prepare($insert_sql);
                 $insert_result = $insert_stmt->execute([
-                    ":username" => $username,
-                    ":email" => $email,
-                    ":password" => $hashed_password,
-                    ":signature" => $signature,
+                    ":username"   => $username,
+                    ":email"      => $email,
+                    ":password"   => $hashed_password,
+                    ":signature"  => $signature,
                     ":last_login" => $last_login,
-                    ":created" => $created
+                    ":created"    => $created
                 ]);
 
                 if ($insert_result) {
                     echo '<div class="success">Registration was successful!</div>';
 
-                    // Автоматично влизане
-                    $login_sql = "SELECT user_id, username, type, avatar, signature, password FROM users WHERE username = :username";
+                    // Automatic login after registration
+                    $login_sql = "SELECT user_id, username, type, avatar, signature, password 
+                                  FROM users WHERE username = :username";
                     $login_stmt = $conn->prepare($login_sql);
                     $login_stmt->execute([":username" => $username]);
 
@@ -95,26 +102,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $_SESSION['is_loged'] = true;
                             $_SESSION['user_id'] = $row['user_id'];
                             $_SESSION['username'] = $row['username'];
-                            $_SESSION['type'] = (int)'1';
-                            $_SESSION['avatar'] = 'uploads/avatar-default.avif';
-                            $_SESSION['signature'] = $user['signature'];
+                            $_SESSION['type'] = (int)$row['type'];
+                            // Use default avatar if none is set
+                            $_SESSION['avatar'] = $row['avatar'] ? $row['avatar'] : 'uploads/avatar-default.avif';
+                            $_SESSION['signature'] = $row['signature'];
 
                             session_regenerate_id(true);
 
+                            // Update last_login timestamp for the logged in user
                             $update_login_sql = "UPDATE users SET last_login = :last_login WHERE user_id = :user_id";
                             $update_login_stmt = $conn->prepare($update_login_sql);
                             $update_login_stmt->execute([
                                 ":last_login" => date('Y-m-d H:i:s'),
-                                ":user_id" => $_SESSION['user_info']['user_id']
+                                ":user_id"    => $row['user_id']
                             ]);
 
                             header('Location: index.php');
-                            exit; // Добавяме exit, за да спре изпълнението на скрипта след пренасочване
+                            exit; // Stop further script execution after redirection
                         } else {
-                            echo 'Incorrect username or password.';
+                            echo '<div class="error">Incorrect username or password.</div>';
                         }
                     } else {
-                        echo "Error with automatic login.";
+                        echo '<div class="error">Error with automatic login.</div>';
                     }
                 } else {
                     $errors[] = 'Error during registration. Please try again later.';
@@ -124,11 +133,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Показване на грешки
+// Display errors if any
 if (!empty($errors)) {
     echo '<div class="errors">';
     foreach ($errors as $error) {
-        echo '<p>' . $error . '</p>';
+        echo '<p>' . htmlspecialchars($error) . '</p>';
     }
     echo '</div>';
 }
@@ -147,7 +156,9 @@ if (!empty($errors)) {
     <label for="confirm_password">Confirm Password:</label><br>
     <input type="password" name="confirm_password" id="confirm_password" required><br><br>
 
-    <label for="question"><b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" /></label><br>
+    <label for="question">
+        <b>Question:</b> How much is <b>2</b> PLUS <br /><img src="template/images/question.png" alt="" />
+    </label><br>
     <input type="text" id="question" name="question" size="50" required><br><br>
 
     <input type="submit" value="Register">

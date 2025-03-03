@@ -14,6 +14,7 @@ class Category {
         $this->conn = $db;
     }
 
+    // Get the current position of a category
     private function getCurrentPosition($cat_id) {
         $query = "SELECT position FROM " . $this->table_name . " WHERE cat_id = :cat_id";
         $stmt = $this->conn->prepare($query);
@@ -22,6 +23,7 @@ class Category {
         return $stmt->fetch(PDO::FETCH_ASSOC)['position'];
     }
 
+    // Get the adjacent category based on the current position and direction (up or down)
     private function getAdjacentCategory($current_position, $direction) {
         $order = ($direction === 'up') ? 'DESC' : 'ASC';
         $operator = ($direction === 'up') ? '<' : '>';
@@ -32,6 +34,7 @@ class Category {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Swap the position of the category with its adjacent one based on the given direction
     public function moveCategory($cat_id, $direction) {
         $this->conn->beginTransaction();
         try {
@@ -56,14 +59,17 @@ class Category {
         }
     }
 
+    // Move category up in the order
     public function moveUp($cat_id) {
         $this->moveCategory($cat_id, 'up');
     }
 
+    // Move category down in the order
     public function moveDown($cat_id) {
         $this->moveCategory($cat_id, 'down');
     }
 
+    // Create a new category with a new position (set as max position + 1)
     public function createCategory($cat_name, $cat_desc, $def_icon) {
         $position = $this->getMaxPosition() + 1;
         $query = "INSERT INTO " . $this->table_name . " (cat_name, cat_desc, def_icon, position) VALUES (:cat_name, :cat_desc, :def_icon, :position)";
@@ -75,6 +81,7 @@ class Category {
         return $stmt->execute();
     }
 
+    // Get the maximum position value among all categories
     public function getMaxPosition() {
         $query = "SELECT MAX(position) FROM " . $this->table_name;
         $stmt = $this->conn->prepare($query);
@@ -82,33 +89,36 @@ class Category {
         return (int) $stmt->fetchColumn();
     }
 
-	public function updateCategory($cat_id, $cat_name, $cat_desc, $def_icon) {
-		$query = "UPDATE " . $this->table_name . " SET cat_name = :cat_name, cat_desc = :cat_desc, def_icon = :def_icon WHERE cat_id = :cat_id";
-		$stmt = $this->conn->prepare($query);
+    // Update an existing category
+    public function updateCategory($cat_id, $cat_name, $cat_desc, $def_icon) {
+        $query = "UPDATE " . $this->table_name . " SET cat_name = :cat_name, cat_desc = :cat_desc, def_icon = :def_icon WHERE cat_id = :cat_id";
+        $stmt = $this->conn->prepare($query);
 
-		// Почистване на входните данни
-		$cat_name = htmlspecialchars(strip_tags($cat_name));
-		$cat_desc = htmlspecialchars(strip_tags($cat_desc));
-		$def_icon = htmlspecialchars(strip_tags($def_icon));
-		$cat_id = (int)$cat_id;
+        // Clean input data
+        $cat_name = htmlspecialchars(strip_tags($cat_name));
+        $cat_desc = htmlspecialchars(strip_tags($cat_desc));
+        $def_icon = htmlspecialchars(strip_tags($def_icon));
+        $cat_id = (int)$cat_id;
 
-		// Свързване на параметрите
-		$stmt->bindParam(":cat_name", $cat_name);
-		$stmt->bindParam(":cat_desc", $cat_desc);
-		$stmt->bindParam(":def_icon", $def_icon);
-		$stmt->bindParam(":cat_id", $cat_id);
+        // Bind parameters
+        $stmt->bindParam(":cat_name", $cat_name);
+        $stmt->bindParam(":cat_desc", $cat_desc);
+        $stmt->bindParam(":def_icon", $def_icon);
+        $stmt->bindParam(":cat_id", $cat_id);
 
-		// Изпълнение на заявката
-		if ($stmt->execute()) {
-			return true;
-		}
-		return false;
-	}
+        // Execute query
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
 
+    // Handle a delete request for a category
     public function handleDeleteRequest($cat_id) {
         return $this->delete($cat_id);
     }
 
+    // Handle a move request (up or down) for a category
     public function handleMoveRequest($action, $cat_id) {
         if ($action === 'move_up') {
             return $this->moveUp($cat_id);
@@ -118,6 +128,7 @@ class Category {
         return false;
     }
 
+    // Retrieve a category by its ID
     public function getCategoryById($cat_id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE cat_id = :cat_id";
         $stmt = $this->conn->prepare($query);
@@ -126,23 +137,25 @@ class Category {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Delete a category by its ID
     public function delete($cat_id) {
         $query = "DELETE FROM " . $this->table_name . " WHERE cat_id = :cat_id";
         $stmt = $this->conn->prepare($query);
 
-        // Почистване на входните данни
+        // Clean input data
         $cat_id = (int)$cat_id;
 
-        // Свързване на параметрите
+        // Bind parameter
         $stmt->bindParam(":cat_id", $cat_id);
 
-        // Изпълнение на заявката
+        // Execute query
         if ($stmt->execute()) {
             return true;
         }
         return false;
     }
 
+    // Retrieve all categories (only ID and name)
     public function getAllCategories() {
         $query = "SELECT cat_id, cat_name FROM " . $this->table_name . " ORDER BY cat_id ASC";
         $stmt = $this->conn->prepare($query);
@@ -150,6 +163,7 @@ class Category {
         return $stmt;
     }
 
+    // List all categories with details and additional counts
     public function listCategories() {
         $query = "SELECT cat_id, cat_name, cat_desc, def_icon, position FROM " . $this->table_name . " ORDER BY position ASC";
         $stmt = $this->conn->prepare($query);
@@ -164,21 +178,22 @@ class Category {
         return $categories;
     }
 
+    // Count the number of topics for a given category
     public function countTopics($cat_id) {
-        $sql_broi_temi = "SELECT COUNT(*) FROM topics WHERE parent = :cat_id";
-        $stmt = $this->conn->prepare($sql_broi_temi);
+        $sql_topics = "SELECT COUNT(*) FROM topics WHERE parent = :cat_id";
+        $stmt = $this->conn->prepare($sql_topics);
         $stmt->bindParam(":cat_id", $cat_id, PDO::PARAM_INT);
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
 
+    // Count the number of comments for a given category (joining topics and comments)
     public function countComments($cat_id) {
-        $sql_broi_komentari = "SELECT COUNT(*) FROM topics as t JOIN comments as c ON t.topic_id = c.topic_id WHERE t.parent = :cat_id";
-        $stmt = $this->conn->prepare($sql_broi_komentari);
+        $sql_comments = "SELECT COUNT(*) FROM topics AS t JOIN comments AS c ON t.topic_id = c.topic_id WHERE t.parent = :cat_id";
+        $stmt = $this->conn->prepare($sql_comments);
         $stmt->bindParam(":cat_id", $cat_id, PDO::PARAM_INT);
         $stmt->execute();
         return (int) $stmt->fetchColumn();
     }
-
 }
 ?>

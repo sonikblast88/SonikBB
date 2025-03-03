@@ -11,31 +11,33 @@ $db = $database->connect();
 $topicsModel = new Topics($db);
 $commentsModel = new Comments($db);
 
-// Проверка за администратор или автор на темата
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    die("Нямате достъп до тази страница.");
+    die("You do not have access to this page.");
 }
 
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 
-// Проверка дали потребителят е администратор или автор на темата
+// Retrieve topic information
 $topic = $topicsModel->getTopicById($topic_id);
 if (!$topic) {
-    die("Темата не е намерена.");
+    die("Topic not found.");
 }
 
-$isAdmin = $_SESSION['type'] == 2;
+// Check if the user is an administrator or the author of the topic
+$isAdmin = isset($_SESSION['type']) && $_SESSION['type'] == 2;
 $isAuthor = $topic['topic_author'] == $_SESSION['user_id'];
 
 if (!$isAdmin && !$isAuthor) {
-    die("Нямате права да изтриете тази тема.");
+    die("You do not have permission to delete this topic.");
 }
 
-// Изтриване на темата и коментарите
+// Delete the topic along with its associated comments
 if ($topicsModel->deleteTopic($topic_id)) {
-    header("Location: index.php"); // Пренасочване към началната страница
+    // Redirect to the homepage
+    header("Location: index.php");
     exit();
 } else {
-    die("Грешка при изтриване на темата.");
+    die("Error deleting topic.");
 }
 ?>

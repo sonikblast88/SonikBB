@@ -1,152 +1,118 @@
+-- phpMyAdmin SQL Dump
+-- Generation Time: Mar 03, 2025 at 10:30 AM
+-- Server version: 10.3.32-MariaDB-log
+-- PHP Version: 8.0.23
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+-- --------------------------------------------------------
+-- Database: `sonikbb`
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
 CREATE TABLE `categories` (
-  `cat_id` int(11) NOT NULL,
+  `cat_id` int(11) NOT NULL AUTO_INCREMENT,
   `position` int(11) NOT NULL,
-  `cat_name` varchar(100) NOT NULL,
-  `cat_desc` varchar(250) NOT NULL,
-  `def_icon` varchar(150) NOT NULL DEFAULT 'images/forum.png'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cat_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cat_desc` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `def_icon` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'images/forum.png',
+  PRIMARY KEY (`cat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Insert test data for table `categories`
+--
+INSERT INTO `categories` (`cat_id`, `position`, `cat_name`, `cat_desc`, `def_icon`) VALUES
+(1, 1, 'Test Category One', 'This is the first test category.', 'images/forum.png'),
+(2, 2, 'Test Category Two', 'This is the second test category.', 'images/forum.png');
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
-
-CREATE TABLE `comments` (
-  `comment_id` int(11) NOT NULL,
-  `topic_id` int(11) NOT NULL,
-  `comment` text NOT NULL,
-  `comment_author` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `topics`
 --
-
 CREATE TABLE `topics` (
-  `topic_id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL AUTO_INCREMENT,
   `parent` int(11) NOT NULL,
-  `topic_name` varchar(255) NOT NULL,
-  `topic_desc` text NOT NULL,
-  `topic_author` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+  `topic_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `topic_desc` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `topic_author` int(11) NOT NULL,
+  `date_added_topic` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`topic_id`),
+  KEY `fk_topics_category` (`parent`),
+  KEY `fk_topics_user` (`topic_author`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Insert test data for table `topics`
+-- (Assuming the installer will add an admin user with user_id = 1)
+--
+INSERT INTO `topics` (`topic_id`, `parent`, `topic_name`, `topic_desc`, `topic_author`, `date_added_topic`) VALUES
+(1, 1, 'Welcome to Test Category One', 'This is the first test topic in category one.', 1, '2025-03-03 05:40:59'),
+(2, 2, 'Welcome to Test Category Two', 'This is the first test topic in category two.', 1, '2025-03-03 06:00:00');
+
+-- --------------------------------------------------------
+-- Table structure for table `comments`
+--
+CREATE TABLE `comments` (
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `topic_id` int(11) NOT NULL,
+  `comment` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `comment_author` int(11) NOT NULL,
+  `date_added_comment` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`comment_id`),
+  KEY `fk_comments_topic` (`topic_id`),
+  KEY `fk_comments_user` (`comment_author`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Insert test data for table `comments`
+-- (Assuming the installer will add an admin user with user_id = 1)
+--
+INSERT INTO `comments` (`comment_id`, `topic_id`, `comment`, `comment_author`, `date_added_comment`) VALUES
+(1, 1, 'This is a test comment on topic one.', 1, '2025-03-03 05:45:00'),
+(2, 2, 'This is a test comment on topic two.', 1, '2025-03-03 06:05:00');
+
+-- --------------------------------------------------------
 -- Table structure for table `users`
 --
-
 CREATE TABLE `users` (
-  `user_id` int(11) NOT NULL,
-  `signature` varchar(255) NOT NULL DEFAULT 'No Signature',
-  `username` varchar(42) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `type` int(1) NOT NULL DEFAULT 1 COMMENT '1 - user and 2 - admin',
-  `avatar` varchar(150) NOT NULL DEFAULT 'uploads/avatar-default.avif',
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(42) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 - user, 2 - admin',
+  `signature` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'No Signature',
+  `avatar` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'uploads/avatar-default.avif',
   `last_login` datetime NOT NULL,
-  `email` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Note: No test user data is inserted because the installer will add an admin user.
 
 -- --------------------------------------------------------
-
---
 -- Table structure for table `visitors`
 --
-
 CREATE TABLE `visitors` (
-  `id` int(11) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `user_agent` text NOT NULL,
-  `referrer` text DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_agent` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `referrer` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `visit_time` datetime NOT NULL,
-  `page_visited` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `page_visited` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`cat_id`);
-
---
--- Indexes for table `comments`
---
-ALTER TABLE `comments`
-  ADD PRIMARY KEY (`comment_id`);
-
---
--- Indexes for table `topics`
---
-ALTER TABLE `topics`
-  ADD PRIMARY KEY (`topic_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`);
-
---
--- Indexes for table `visitors`
---
-ALTER TABLE `visitors`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `cat_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `topics`
---
-ALTER TABLE `topics`
-  MODIFY `topic_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `visitors`
---
-ALTER TABLE `visitors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
-ALTER TABLE `users` ADD `created` DATE NOT NULL AFTER `email`;
-ALTER TABLE `topics` ADD `date_added_topic` DATE NOT NULL AFTER `topic_author`; 
-ALTER TABLE `comments` ADD `date_added_comment` DATE NOT NULL AFTER `comment_author`; 
-
-INSERT INTO `categories` (`position`, `cat_name`, `cat_desc`)
-VALUES (1, 'Your first category', 'With a simple description text');
-
-INSERT INTO `topics` (`parent`, `topic_name`, `topic_desc`, `topic_author`, `date_added_topic`)
-VALUES (1, 'The firs topic of this forum', 'just a simple topic description', 1, now()); -- the id of the admin 1
-
-INSERT INTO `comments` (`topic_id`, `comment`, `comment_author`, `date_added_comment`)
-VALUES (1, 'Hello dear visitor', 1, now()); -- Заменете 1 с ID на създадения администратор и ID на създадения форум
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

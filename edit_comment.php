@@ -4,18 +4,21 @@ session_start();
 include_once 'core/autoload.php';
 include_once 'models/Comments.php';
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo "Трябва да сте логнат.";
+    echo "You must be logged in.";
     exit;
 }
 
+// Retrieve comment_id and topic_id from URL
 $comment_id = isset($_GET['comment_id']) ? (int)$_GET['comment_id'] : 0;
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 
+// Validate comment_id and topic_id
 if ($comment_id <= 0 || $topic_id <= 0) {
     http_response_code(400);
-    echo "Невалидни параметри.";
+    echo "Invalid parameters.";
     exit;
 }
 
@@ -24,20 +27,16 @@ $db = $database->connect();
 
 $commentsModel = new Comments($db);
 
-// Вземане на ID на коментара от URL
-$comment_id = isset($_GET['comment_id']) ? (int)$_GET['comment_id'] : 0;
-$topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
-
-// Извличане на информация за коментара
+// Retrieve comment information
 $commentData = $commentsModel->getCommentById($comment_id);
 
-// Проверка дали потребителят има права да редактира коментара
+// Check if the user has permission to edit the comment (either an admin or the comment author)
 if ($_SESSION['type'] != 2 && $commentData['comment_author'] != $_SESSION['user_id']) {
-    echo "Нямате права да редактирате този коментар.";
+    echo "You do not have permission to edit this comment.";
     exit;
 }
 
-// Обработка на формата за редактиране на коментар
+// Process the edit comment form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment = $_POST['comment'];
 
@@ -45,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: topic.php?topic_id=" . $topic_id);
         exit();
     } else {
-        echo "Грешка при редактиране на коментар.";
+        echo "Error editing comment.";
     }
 }
 
@@ -53,8 +52,8 @@ include 'template/header.php';
 ?>
 
 <form method="POST" action="edit_comment.php?comment_id=<?= $comment_id ?>&topic_id=<?= $topic_id ?>">
-	<label for="topic_name"><h2>Edit Comment<h2></label>
-	
+    <label for="topic_desc"><h2>Edit Comment</h2></label>
+    
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
         <button type="button" onclick="formatText('italic')"><i>I</i></button>
@@ -66,11 +65,11 @@ include 'template/header.php';
         <button type="button" onclick="formatText('quote')">Quote</button>
         <button type="button" onclick="openFileUpload()">Upload Image</button>
     </div>
-	
-    <textarea name="comment" id="topic_desc" rows="20" cols="102" required><?= $commentData['comment'] ?></textarea>
+    
+    <textarea name="comment" id="topic_desc" rows="20" cols="102" required><?= htmlspecialchars($commentData['comment']) ?></textarea>
     <button type="submit">Save Changes</button>
     <a href="topic.php?topic_id=<?= $topic_id ?>"><button type="button">Cancel</button></a>
-	
+    
     <div id="fileUploadModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid gray;">
         <input type="file" id="imageUpload" name="imageUpload">
         <button type="button" onclick="uploadImage()">Upload</button>
@@ -109,7 +108,7 @@ function formatText(type) {
             if (level && level >= 1 && level <= 6) {
                 formattedText = "#".repeat(level) + " " + selectedText;
             } else {
-                return; 
+                return;
             }
             break;
         case 'list':
@@ -135,7 +134,7 @@ function insertImage() {
     }
 }
 
-// This part is for uploading images, uses ../upload.php and uploads them to the uploads folder
+// Functions for uploading images via upload.php
 function openFileUpload() {
     document.getElementById('fileUploadModal').style.display = 'block';
 }
@@ -167,10 +166,10 @@ function uploadImage() {
         })
         .catch(error => {
             console.error('Error uploading image:', error);
-            alert('An error occurred during upload.'); 
+            alert('An error occurred during upload.');
         });
     } else {
-        alert('Please select an image to upload.'); 
+        alert('Please select an image to upload.');
     }
 }
 </script>

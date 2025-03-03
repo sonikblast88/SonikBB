@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include_once 'core/autoload.php';
 include_once 'models/Users.php';
 include_once 'models/Topics.php';
@@ -11,7 +12,7 @@ $topicsModel = new Topics($db);
 
 $get_profile_id = filter_input(INPUT_GET, 'profile_id', FILTER_SANITIZE_NUMBER_INT);
 
-// Check if user is logged in and is editing their own profile
+// Check if the user is logged in and is editing their own profile
 if (!isset($_SESSION['is_loged']) || $_SESSION['user_id'] !== $get_profile_id) {
     header("Location: index.php");
     exit;
@@ -23,8 +24,9 @@ if (!$user) {
 }
 
 $successMessage = ""; // Initialize success message variable
+$error = "";
 
-// Password change form processing
+// Process password change form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_submit'])) {
     $old_password = trim($_POST['old_password']);
     $new_password = trim($_POST['new_password']);
@@ -43,19 +45,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_submit'])) {
     }
 }
 
-// Signature form processing
+// Process signature update form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_signature'])) {
     $signature = trim($_POST['signature']);
-    $usersModel->updateSignature($get_profile_id, $signature);
-    $successMessage = "Signature changed successfully.";
+    if ($usersModel->updateSignature($get_profile_id, $signature)) {
+        $_SESSION['signature'] = $signature;
+        // Re-fetch updated user data
+        $user = $usersModel->getUserById($get_profile_id);
+        $successMessage = "Signature changed successfully.";
+    } else {
+        $error = "Error updating signature.";
+    }
 }
 
-// Avatar upload form processing
+// Process avatar upload form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['imageUpload'])) {
     $result = $usersModel->uploadAvatar($get_profile_id, $_FILES['imageUpload']);
 
     if ($result === true) {
-        $successMessage = "Avatar changed successfully. Please log out and log back in to apply changes.";
+        // Re-fetch updated user data and update session variable for avatar
+        $user = $usersModel->getUserById($get_profile_id);
+        $_SESSION['avatar'] = $user['avatar'];
+        $successMessage = "Avatar changed successfully.";
     } else {
         $error = $result;
         echo $error;
@@ -69,7 +80,11 @@ include 'template/header.php';
     <p>Hello, <b><?= htmlspecialchars($user['username']) ?></b>. You can edit your profile here.</p>
 
     <?php if (!empty($successMessage)): ?>
-        <p style="color: green;"><?= $successMessage ?></p>
+        <p style="color: green;"><?= htmlspecialchars($successMessage) ?></p>
+    <?php endif; ?>
+
+    <?php if (!empty($error)): ?>
+        <p style="color: red;"><?= htmlspecialchars($error) ?></p>
     <?php endif; ?>
 
     <h3>Change Password</h3>

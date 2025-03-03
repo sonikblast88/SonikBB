@@ -11,11 +11,14 @@ class Database {
         $this->connect();
     }
 
+    // Establish a connection to the database using PDO
     public function connect() {
         $this->conn = null;
 
         try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            // Build DSN with charset defined in config (DB_CHARSET)
+            $dsn = "mysql:host={$this->host};dbname={$this->db_name};charset=" . DB_CHARSET;
+            $this->conn = new PDO($dsn, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $exception) {
             echo "Connection error: " . $exception->getMessage();
@@ -24,3 +27,4 @@ class Database {
         return $this->conn;
     }
 }
+?>

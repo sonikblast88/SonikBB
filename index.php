@@ -2,7 +2,7 @@
 // index.php
 session_start();
 
-// Проверка за празен config.php
+// Check if config.php is empty
 if (filesize('core/config.php') === 0) {
     header('Location: install/index.php');
     exit;
@@ -17,10 +17,10 @@ include_once 'template/header.php';
 $database = new Database();
 $db = $database->connect();
 
-// Проверка за успешна връзка с базата данни
+// Check for successful database connection
 if (!$db) {
-    echo "Грешка при свързване с базата данни. Моля, опитайте по-късно.";
-    exit; // Прекратяване на изпълнението
+    echo "Error connecting to the database. Please try again later.";
+    exit; // Stop execution
 }
 
 $categoryModel = new Category($db);
@@ -30,7 +30,7 @@ $showAddCategoryForm = false;
 $showEditCategoryForm = false;
 $editCategory = null;
 
-// Обработка на заявки за изтриване
+// Handle delete request
 if (isset($_GET['delete'])) {
     $cat_id = filter_var($_GET['delete'], FILTER_VALIDATE_INT);
     if ($cat_id !== false && $categoryModel->handleDeleteRequest($cat_id)) {
@@ -39,25 +39,24 @@ if (isset($_GET['delete'])) {
     }
 }
 
-// Обработка на заявки за промяна на позицията
+// Handle position change request
 if (isset($_GET['action'], $_GET['cat_id'])) {
     $cat_id = filter_var($_GET['cat_id'], FILTER_VALIDATE_INT);
-
     if ($cat_id !== false && $categoryModel->handleMoveRequest($_GET['action'], $cat_id)) {
         header("Location: index.php");
         exit;
     }
 }
 
-// Проверка за администратор
+// Check if user is admin
 $is_admin = isAdmin();
 
-// Добавяне на категория
+// Display add category form if admin and requested
 if ($is_admin && isset($_GET['add_category'])) {
     $showAddCategoryForm = true;
 }
 
-// Редактиране на категория
+// Display edit category form if admin and requested
 if ($is_admin && isset($_GET['edit_category'])) {
     $cat_id = filter_var($_GET['edit_category'], FILTER_VALIDATE_INT);
     if ($cat_id !== false) {
@@ -66,7 +65,7 @@ if ($is_admin && isset($_GET['edit_category'])) {
     }
 }
 
-// Обработка на формата за добавяне на категория
+// Process add category form submission
 if ($is_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_category_form'])) {
     $cat_name = htmlspecialchars(strip_tags($_POST['cat_name']));
     $cat_desc = htmlspecialchars(strip_tags($_POST['cat_desc']));
@@ -78,7 +77,7 @@ if ($is_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_cate
     }
 }
 
-// Обработка на формата за редактиране на категория
+// Process edit category form submission
 if ($is_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_category_form'])) {
     $cat_id = (int)$_POST['cat_id'];
     $cat_name = htmlspecialchars(strip_tags($_POST['cat_name']));
@@ -91,9 +90,9 @@ if ($is_admin && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_cat
     }
 }
 
-// Извличане на категории
+// Retrieve categories
 $categories = $categoryModel->listCategories();
-//var_dump($categories); // Добавете тази линия
+// var_dump($categories); // Uncomment this line for debugging
 ?>
 
 <div id="content">
@@ -135,7 +134,7 @@ $categories = $categoryModel->listCategories();
             <input type="hidden" name="add_category_form" value="1">
             <input type="text" name="cat_name" placeholder="Category Name" required>
             <input type="text" name="cat_desc" placeholder="Category Description" required>
-            <input type="text" name="def_icon" placeholder="Default Icon" required>
+            <input type="text" name="def_icon" placeholder="Default Icon" value="images/forum.png" required>
             <button type="submit">Create</button>
             <a href="index.php"><button type="button">Cancel</button></a>
         </form>
@@ -157,4 +156,5 @@ $categories = $categoryModel->listCategories();
 
 <?php 
 include_once('aside.php');
-include_once 'template/footer.php'; 
+include_once 'template/footer.php';
+?>

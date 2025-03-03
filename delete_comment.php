@@ -9,40 +9,40 @@ $db = $database->connect();
 
 $commentsModel = new Comments($db);
 
-// Проверка дали потребителят е логнат
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    die("Нямате достъп до тази страница.");
+    die("You do not have access to this page.");
 }
 
-// Вземане на comment_id и topic_id от URL
+// Retrieve comment_id and topic_id from URL
 $comment_id = isset($_GET['comment_id']) ? (int)$_GET['comment_id'] : 0;
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 
-// Проверка за валидност на comment_id и topic_id
+// Validate comment_id and topic_id
 if ($comment_id <= 0 || $topic_id <= 0) {
-    die("Невалиден идентификатор на коментар или тема.");
+    die("Invalid comment or topic identifier.");
 }
 
-// Извличане на информация за коментара
+// Retrieve comment information
 $comment = $commentsModel->getCommentById($comment_id);
 if (!$comment) {
-    die("Коментарът не е намерен.");
+    die("Comment not found.");
 }
 
-// Проверка дали потребителят е администратор или автор на коментара
-$isAdmin = isset($_SESSION['type']) && $_SESSION['type'] == 2; // Ако тип 2 е администратор
+// Check if the user is an administrator or the author of the comment
+$isAdmin = isset($_SESSION['type']) && $_SESSION['type'] == 2; // Type 2 is administrator
 $isAuthor = $comment['comment_author'] == $_SESSION['user_id'];
 
 if (!$isAdmin && !$isAuthor) {
-    die("Нямате права да изтриете този коментар.");
+    die("You do not have permission to delete this comment.");
 }
 
-// Изтриване на коментара
+// Delete the comment
 if ($commentsModel->deleteComment($comment_id)) {
-    // Пренасочване обратно към темата
+    // Redirect back to the topic page
     header("Location: topic.php?topic_id=" . $topic_id);
     exit();
 } else {
-    die("Грешка при изтриване на коментара.");
+    die("Error deleting comment.");
 }
 ?>

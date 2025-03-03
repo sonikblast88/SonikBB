@@ -1,20 +1,21 @@
 <?php
-// edit_topic.php
 session_start();
 
 include_once 'core/autoload.php';
 include_once 'models/Topics.php';
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
-    echo "Трябва да сте логнат.";
+    echo "You must be logged in.";
     exit;
 }
 
+// Retrieve topic ID from URL and validate it
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 if ($topic_id <= 0) {
     http_response_code(400);
-    echo "Невалидно ID на тема.";
+    echo "Invalid topic ID.";
     exit;
 }
 
@@ -23,29 +24,30 @@ $db = $database->connect();
 
 $topicsModel = new Topics($db);
 
-// Вземане на ID на темата от URL
-$topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
-
-// Извличане на информация за темата
+// Retrieve topic information
 $topic = $topicsModel->getTopicById($topic_id);
 
-// Обработка на формата за редактиране на тема
+// Process the edit topic form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $topic_name = htmlspecialchars(strip_tags($_POST['topic_name']));
+    // Allow HTML/Markdown formatting for topic description
     $topic_desc = $_POST['topic_desc'];
 
     if ($topicsModel->updateTopic($topic_id, $topic_name, $topic_desc)) {
         header("Location: topic.php?topic_id=" . $topic['topic_id']);
         exit();
+    } else {
+        echo "Error updating topic.";
     }
 }
-include ('template/header.php');
+
+include('template/header.php');
 ?>
 
-<!-- Форма за редактиране на тема -->
+<!-- Form for editing a topic -->
 <form method="POST" action="edit_topic.php?topic_id=<?= $topic_id ?>">
-	<label for="topic_name"><h2>Edit Topic<h2></label>
-    <input type="text" name="topic_name" value="<?= $topic['topic_name'] ?>" size="98" placeholder="Topic Name" required>
+    <label for="topic_name"><h2>Edit Topic</h2></label>
+    <input type="text" name="topic_name" value="<?= htmlspecialchars($topic['topic_name']) ?>" size="98" placeholder="Topic Name" required>
 
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
@@ -58,11 +60,11 @@ include ('template/header.php');
         <button type="button" onclick="formatText('quote')">Quote</button>
         <button type="button" onclick="openFileUpload()">Upload Image</button>
     </div>
-	
-    <textarea name="topic_desc" id="topic_desc" rows="20" cols="102" required><?= $topic['topic_desc'] ?></textarea>
+    
+    <textarea name="topic_desc" id="topic_desc" rows="20" cols="102" required><?= htmlspecialchars($topic['topic_desc']) ?></textarea>
     <button type="submit">Save Changes</button>
     <a href="topic.php?topic_id=<?= $topic['topic_id'] ?>"><button type="button">Cancel</button></a>
-	
+    
     <div id="fileUploadModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background-color:white; padding:20px; border:1px solid gray;">
         <input type="file" id="imageUpload" name="imageUpload">
         <button type="button" onclick="uploadImage()">Upload</button>
@@ -101,7 +103,7 @@ function formatText(type) {
             if (level && level >= 1 && level <= 6) {
                 formattedText = "#".repeat(level) + " " + selectedText;
             } else {
-                return; 
+                return;
             }
             break;
         case 'list':
@@ -127,7 +129,7 @@ function insertImage() {
     }
 }
 
-// This part is for uploading images, uses ../upload.php and uploads them to the uploads folder
+// Functions for uploading images using upload.php
 function openFileUpload() {
     document.getElementById('fileUploadModal').style.display = 'block';
 }
@@ -159,10 +161,10 @@ function uploadImage() {
         })
         .catch(error => {
             console.error('Error uploading image:', error);
-            alert('An error occurred during upload.'); 
+            alert('An error occurred during upload.');
         });
     } else {
-        alert('Please select an image to upload.'); 
+        alert('Please select an image to upload.');
     }
 }
 </script>
