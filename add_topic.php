@@ -47,8 +47,21 @@ include('template/header.php');
 ?>
 
 <form method="POST" action="add_topic.php?cat_id=<?= $cat_id ?>" enctype="multipart/form-data">
-    <label for="topic_name"><h2>Add Topic</h2></label>
-    <input type="text" name="topic_name" size="98" placeholder="Topic Name" required>
+
+	<label for="topic_name"><h2>Add Topic</h2></label>
+	<div class="input-container">
+		<button type="button" onclick="insertIntoTitle('📢 ')">📢</button>
+		<button type="button" onclick="insertIntoTitle('📝 ')">📝</button>
+		<button type="button" onclick="insertIntoTitle('🔗 ')">🔗</button>
+		<button type="button" onclick="insertIntoTitle('📎 ')">📎</button>
+		<button type="button" onclick="insertIntoTitle('🖼️ ')">🖼️</button>
+		<button type="button" onclick="insertIntoTitle('💬 ')">💬</button>
+		<button type="button" onclick="insertIntoTitle('📌 ')">📌</button>
+		<button type="button" onclick="insertIntoTitle('⚡ ')">⚡</button>
+		<button type="button" onclick="insertIntoTitle('🚀 ')">🚀</button>
+		<button type="button" onclick="insertIntoTitle('✅ ')">✅</button>
+		<input type="text" id="topic_name" name="topic_name" size="98" placeholder="Topic Name" required>
+	</div>
     
     <div class="toolbar">
         <button type="button" onclick="formatText('bold')"><b>B</b></button>
@@ -72,6 +85,15 @@ include('template/header.php');
         <button type="button" onclick="closeFileUpload()">Cancel</button>
     </div>
 </form>
+
+<script>
+function insertIntoTitle(text) {
+    const inputField = document.getElementById('topic_name');
+    inputField.value += text;  // Добавя иконката в края на полето
+    inputField.focus();  // Остава курсора активен в полето
+}
+</script>
+
 
 <script>
 function formatText(type) {
