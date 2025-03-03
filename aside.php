@@ -38,7 +38,7 @@
         $lastTopics = $topicsModel->getLastTopics();
         while ($row = $lastTopics->fetch(PDO::FETCH_ASSOC)): ?>
             <div id="last-topics-topic">
-                » <a href="topic.php?topic_id=<?= $row['topic_id'] ?>"><?= htmlspecialchars($row['topic_name']) ?></a> (<?= htmlspecialchars($row['category_name']) ?>)
+                📝 <a href="topic.php?topic_id=<?= $row['topic_id'] ?>"><?= htmlspecialchars($row['topic_name']) ?></a> (<?= htmlspecialchars($row['category_name']) ?>)
             </div>
         <?php endwhile; ?>
     </div>
