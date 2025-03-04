@@ -24,9 +24,9 @@ $stmt = $conn->query($sql_stats);
 $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($stats) {
-    echo '<br/>» We have <b>' . $stats['user_count'] . '</b> registered users.<br/>';
-    echo '» They have written <b>' . $stats['topic_count'] . '</b> topics and <b>' . $stats['comment_count'] . '</b> comments.<br/>';
-    echo '» Last registered user is: <b>' . htmlspecialchars($stats['last_user'], ENT_QUOTES) . '.</b><br>';
+    echo '<br/>👥 We have <b>' . $stats['user_count'] . '</b> registered users.<br/>';
+    echo '📝 They have written <b>' . $stats['topic_count'] . '</b> topics and <b>' . $stats['comment_count'] . '</b> comments.<br/>';
+    echo '👤 Last registered user is: <b>' . htmlspecialchars($stats['last_user'], ENT_QUOTES) . '.</b><br>';
 } else {
     echo "Error retrieving statistics.";
 }
@@ -38,7 +38,7 @@ $stmt = $conn->prepare($sql_active_users);
 $stmt->execute([':date' => $date]);
 $active_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo '» Active users in the last 24 hours: ';
+echo '🔥 Active users in the last 24 hours: ';
 if ($active_users) {
     foreach ($active_users as $user) {
         echo '[ ' . htmlspecialchars($user['username'], ENT_QUOTES) . ' ] ';
@@ -61,6 +61,13 @@ if (!isset($_SESSION['is_loged']) || $_SESSION['type'] != 2) {
     ]);
 }
 
+// board created 
+$sql_board_created = "SELECT created FROM users WHERE user_id = 1 LIMIT 1";
+$stmt_board = $conn->query($sql_board_created);
+$board_data = $stmt_board->fetch(PDO::FETCH_ASSOC);
+$board_created = $board_data ? date("d M Y", strtotime($board_data['created'])) : "Unknown";
+echo '<br>📋 Board started at <b>'.$board_created.'</b>';
+
 // SERVER UPTIME
 if (stripos(PHP_OS, 'WIN') !== false) {
     // For Windows, using "net stats srv"
@@ -69,27 +76,30 @@ if (stripos(PHP_OS, 'WIN') !== false) {
         // Look for "Statistics since" in the output (adjust for localization if needed)
         if (preg_match('/Statistics since (.*)/i', $uptime_output, $matches)) {
             $uptime_info = $matches[1];
-            echo '<br/>» Server Uptime: <b>' . htmlspecialchars(trim($uptime_info), ENT_QUOTES) . '</b><br/>';
+            echo '<br/>⏳ Server Uptime: <b>' . htmlspecialchars(trim($uptime_info), ENT_QUOTES) . '</b><br/>';
         } else {
-            echo '<br/>» Server Uptime: Unable to parse uptime information.<br/>';
+            echo '<br/>⏳ Server Uptime: Unable to parse uptime information.<br/>';
         }
     } else {
-        echo '<br/>» Server Uptime: Cannot be requested!<br/>';
+        echo '<br/>⏳ Server Uptime: Cannot be requested!<br/>';
     }
 } else {
     // For Linux
     $uptime_output = shell_exec('uptime -p');
     if ($uptime_output) {
-        echo '<br/>» Server Uptime: <b>' . htmlspecialchars(trim($uptime_output), ENT_QUOTES) . '</b><br/>';
+        echo '<br/>⏳ Server Uptime: <b>' . htmlspecialchars(trim($uptime_output), ENT_QUOTES) . '</b><br/>';
     } else {
-        echo '<br/>» Server Uptime: Cannot be requested!<br/>';
+        echo '<br/>⏳ Server Uptime: Cannot be requested!<br/>';
     }
 }
 
-
 ?>
 <hr style="border: 0px; border-top: dotted 1px;">
-<center>[ <a href="https://sonikbb.eu">SonikBB</a> ] [ Version 1.0.10 ] [ <a href="https://sonikbb.eu/topic.php?topic_id=30">Copyrights</a> ]</center>
+<center>
+    [ <a href="https://sonikbb.eu" style="color: #000; font-weight: bold;">SonikBB</a> ] 
+    [ <span style="color: #000; font-weight: bold;">Version 1.0.09</span> ] 
+    [ <a href="https://sonikbb.eu/topic.php?topic_id=30" style="color: #000; font-weight: bold;">Copyrights</a> ]
+</center>
 </div>
 </body>
 </html>
