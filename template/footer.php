@@ -89,7 +89,7 @@ if (stripos(PHP_OS, 'WIN') !== false) {
 
 ?>
 <hr style="border: 0px; border-top: dotted 1px;">
-<center>SonikBB Version 1.0.05 Dev</center>
+<center>SonikBB Version 1.0.06</center>
 </div>
 </body>
 </html>
