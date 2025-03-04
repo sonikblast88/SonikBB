@@ -35,26 +35,45 @@ function run_q($sql, $params = []) {
     }
 }
 
-// Function to detect bots
 function detect_bot($user_agent) {
     $bots = [
-        'Googlebot' => 'Google Bot',
-        'Bingbot' => 'Bing Bot',
-        'Slurp' => 'Yahoo Bot',
-        'DuckDuckBot' => 'DuckDuckGo Bot',
-        'Baiduspider' => 'Baidu Bot',
-        'YandexBot' => 'Yandex Bot',
-        'Sogou' => 'Sogou Bot',
-        'Exabot' => 'Exalead Bot',
+        'googlebot' => 'Google Bot',
+        'bingbot' => 'Bing Bot',
+        'slurp' => 'Yahoo Bot',
+        'duckduckbot' => 'DuckDuckGo Bot',
+        'baiduspider' => 'Baidu Bot',
+        'yandexbot' => 'Yandex Bot',
+        'sogou' => 'Sogou Bot',
+        'exabot' => 'Exalead Bot',
         'facebot' => 'Facebook Bot',
         'ia_archiver' => 'Alexa Bot',
+        'mj12bot' => 'Majestic Bot',
+        'ahrefsbot' => 'Ahrefs Bot',
+        'semrushbot' => 'SEMrush Bot',
+        'applebot' => 'Apple Bot',
+        'petalbot' => 'Huawei Bot',
+        'twitterbot' => 'Twitter Bot',
+        'linkedinbot' => 'LinkedIn Bot'
     ];
 
+    // Normalize to lowercase for case-insensitive matching
+    $user_agent = strtolower($user_agent);
+
     foreach ($bots as $bot => $name) {
-        if (stripos($user_agent, $bot) !== false) {
+        if (strpos($user_agent, $bot) !== false) {
             return $name;
         }
     }
+
+    // Further verification using DNS lookup (Google's recommended approach)
+    $ip_address = $_SERVER['REMOTE_ADDR'] ?? '';
+    if (!empty($ip_address)) {
+        $host = gethostbyaddr($ip_address);
+        if (preg_match('/googlebot\.com$/', $host) || preg_match('/search\.msn\.com$/', $host)) {
+            return 'Verified Google or Bing Bot';
+        }
+    }
+
     return 'No';
 }
 
