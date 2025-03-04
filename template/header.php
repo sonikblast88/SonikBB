@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="<?php echo WEBSITE_DESC; ?>">
+	<meta name="keywords" content="<?= isset($GLOBALS['keywords']) ? htmlspecialchars(trim($GLOBALS['keywords'])) : 'forum, php, discussion, sonikbb.eu' ?>">
 </head>
 <body>
 <div id="container">

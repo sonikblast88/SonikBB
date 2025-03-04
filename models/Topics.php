@@ -177,5 +177,42 @@ class Topics {
 
         return $stmt->fetchColumn(); // Връща броя на посещенията
     }
+
+	// Method to generate keywords from topic description
+	public function generateKeywords($topic_id, $limit = 10) {
+		$query = "SELECT topic_desc FROM " . $this->table_name . " WHERE topic_id = :topic_id";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindParam(":topic_id", $topic_id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		if (!$result) return '';
+
+		$text = strtolower(strip_tags($result['topic_desc']));
+		$text = preg_replace('/[^\p{L}\p{N}\s]/u', '', $text); // Remove punctuation
+		$words = explode(' ', $text);
+
+		// Common stop words (you can add more)
+		$stopWords = ['and', 'to', 'in', 'of', 'with', 'for', 'that', 'as', 'but', 'or', 'from', 'so', 'by'];
+
+		// Remove empty elements and unnecessary spaces
+		$wordFrequency = [];
+		foreach ($words as $word) {
+			$word = trim($word);
+			if (mb_strlen($word) > 3 && !in_array($word, $stopWords) && !empty($word)) {
+				$wordFrequency[$word] = isset($wordFrequency[$word]) ? $wordFrequency[$word] + 1 : 1;
+			}
+		}
+
+		// Sort by frequency (most common words first)
+		arsort($wordFrequency);
+		$keywordsArray = array_keys(array_slice($wordFrequency, 0, $limit));
+
+		// **Remove extra spaces and new lines**
+		$keywords = implode(', ', array_filter($keywordsArray));
+		$keywords = preg_replace('/\s+/', ' ', $keywords); // Remove extra spaces
+		return trim($keywords);
+	}
+
 }
 ?>

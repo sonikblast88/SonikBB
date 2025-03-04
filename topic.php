@@ -6,7 +6,6 @@ include_once 'models/Topics.php';
 include_once 'models/Category.php';
 include_once 'models/Users.php';
 include_once 'models/Comments.php';
-include_once 'template/header.php';
 
 $database = new Database();
 $db = $database->connect();
@@ -17,20 +16,27 @@ $usersModel = new Users($db);
 $commentsModel = new Comments($db);
 $parsedown = new Parsedown();
 
-// Check user role
 $is_admin = isAdmin();
 $isUserOrAdmin = isUserOrAdmin();
 
 // Retrieve topic ID
 $topic_id = isset($_GET['topic_id']) ? (int)$_GET['topic_id'] : 0;
 $topic = $topicsModel->getTopicById($topic_id);
+
+if (!$topic) {
+    echo "Topic not found!";
+    exit();
+}
+
 $cat_id = $topic['parent'];
-
-// Retrieve topic author information
 $user = $usersModel->getUserById($topic['topic_author']);
-
-// Retrieve comments
 $comments = $commentsModel->getCommentsByTopicId($topic_id);
+
+// **Generate keywords dynamically and store them globally**
+$GLOBALS['keywords'] = $topicsModel->generateKeywords($topic_id);
+
+// **Now include the header AFTER generating keywords**
+include_once 'template/header.php';
 
 // Handle comment actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
