@@ -89,7 +89,7 @@ if (stripos(PHP_OS, 'WIN') !== false) {
 
 ?>
 <hr style="border: 0px; border-top: dotted 1px;">
-<center>SonikBB Version 1.0.06</center>
+<center>[ <a href="https://sonikbb.eu">SonikBB</a> ] [ Version 1.0.06 ] [ <a href="https://sonikbb.eu/topic.php?topic_id=30">Copyrights</a> ]</center>
 </div>
 </body>
 </html>
