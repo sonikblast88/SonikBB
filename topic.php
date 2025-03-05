@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <link rel="stylesheet" href="template/styles.css">
 
-<a href="topics.php?cat_id=<?= $cat_id ?>" class="back-link">&larr; Back to Topics</a>
+<a href="topics.php?cat_id=<?= $cat_id ?>" class="back-link"><img src="template/images/back.png" alt="" /></a>
 
 <div class="topic-container">
     <h2><?= htmlspecialchars($topic['topic_name']) ?></h2>

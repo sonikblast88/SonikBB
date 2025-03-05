@@ -88,6 +88,22 @@ usort($file_details, function($a, $b) {
 });
 
 // Display the table with file details
+
+if (!empty($file_details)) {
+    $latest_file = $file_details[0]; // Взимаме най-новия файл
+    $latest_file_size_kb = round($latest_file['size'] / 1024, 2);
+    $latest_file_date = date("d.m.Y H:i:s", $latest_file['date']);
+    $latest_file_name = htmlspecialchars($latest_file['name']);
+    $latest_download_count = $latest_file['download_count'];
+
+    echo '<div style="background-color: lightblue; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">';
+    echo '<h3>🔹 Latest Version Available</h3>';
+    echo "<p><b>{$latest_file_name}</b> ({$latest_file_size_kb} KB) - Uploaded: {$latest_file_date}</p>";
+    echo "<p><b>Downloads:</b> {$latest_download_count}</p>";
+    echo "<a href='?download=" . urlencode($latest_file_name) . "' style='padding: 10px; background-color: green; color: white; border-radius: 5px; text-decoration: none;'>⬇ Download Latest Version</a>";
+    echo '</div>';
+}
+
 echo '<table border="1">';
 echo "<tr><th>File</th><th>Size</th><th>Upload Date</th><th>Downloads</th><th>Download</th></tr>";
 
@@ -96,14 +112,8 @@ foreach ($file_details as $index => $file) {
     $file_date = date("d.m.Y H:i:s", $file['date']);
     $file_name = $file['name'];
     $download_count = $file['download_count'];
-
-    // Highlight the newest file in green
-    if ($index === 0) {
-        echo "<tr style='background-color: lightgreen;'>";
-    } else {
-        echo "<tr>";
-    }
-
+	
+    echo "<tr>";
     echo "<td>" . htmlspecialchars($file_name) . "</td>";
     echo "<td>" . $file_size_kb . " KB</td>";
     echo "<td>" . $file_date . "</td>";

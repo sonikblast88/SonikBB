@@ -13,6 +13,7 @@ require_once 'models/Category.php';
 require_once 'models/Users.php';
 require_once 'models/Topics.php';
 require_once 'template/header.php';
+require_once 'models/Comments.php';
 
 $database = new Database();
 $db = $database->connect();
@@ -25,6 +26,7 @@ if (!$db) {
 
 $categoryModel = new Category($db);
 $topicsModel = new Topics($db);
+$commentsModel = new Comments($db);
 
 $showAddCategoryForm = false;
 $showEditCategoryForm = false;

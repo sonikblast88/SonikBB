@@ -89,8 +89,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     <?php 
                         $bot_name = $stats->detectBot($row['user_agent']);
                         $row_class = $bot_name !== 'No' ? 'class="bot-row"' : '';
-						$country = isset($row['country']) ? $row['country'] : 'Unknown';
-						$city = isset($row['city']) ? $row['city'] : 'Unknown';
+						$geoData = $stats->getGeoInfo($row['ip_address']);
+						$country = htmlspecialchars($geoData['country']);
+						$city = htmlspecialchars($geoData['city']);
 
                     ?>
                     <tr <?= $row_class ?>>
@@ -98,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td><?= htmlspecialchars($row['user_agent']) ?></td>
                         <td><?= $row['referrer'] ? htmlspecialchars($row['referrer']) : 'Direct' ?></td>
                         <td><?= htmlspecialchars($row['visit_time']) ?></td>
-                        <td><?= htmlspecialchars($row['page_visited']) ?></td>
+                        <td><a href="<?= WEBSITE.htmlspecialchars($row['page_visited']) ?>"><?= htmlspecialchars($row['page_visited']) ?></a></td>
                         <td><?= $bot_name ?></td>
                         <td><?= $country ?></td>
                         <td><?= $city ?></td>

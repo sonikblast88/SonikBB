@@ -19,9 +19,8 @@ class Stats {
     public function getDailyStats() {
         $data = [];
         for ($i = 0; $i < 24; $i++) {
-            $hour = sprintf("%02d", $i);
             $data[] = [
-                "hour" => "$hour:00",
+                "hour" => sprintf("%02d:00", $i),
                 "total" => $this->fetchCount("SELECT COUNT(*) FROM visitors WHERE DATE(visit_time) = CURDATE() AND HOUR(visit_time) = ?", [$i]),
                 "unique" => $this->fetchCount("SELECT COUNT(DISTINCT ip_address) FROM visitors WHERE DATE(visit_time) = CURDATE() AND HOUR(visit_time) = ?", [$i])
             ];
@@ -93,16 +92,93 @@ class Stats {
 
     public function deleteIP($ip) {
         if (filter_var($ip, FILTER_VALIDATE_IP)) {
-            $stmt = $this->runQuery("DELETE FROM visitors WHERE ip_address = :ip_address", [":ip_address" => $ip]);
+            $stmt = $this->runQuery("DELETE FROM visitors WHERE ip_address = ?", [$ip]);
             return $stmt->rowCount() > 0;
         }
         return false;
     }
 
     public function getRecentVisitors($limit = 42) {
-        $sql = "SELECT * FROM visitors ORDER BY visit_time DESC LIMIT :limit";
-        $stmt = $this->runQuery($sql, [":limit" => $limit]);
+        $sql = "SELECT * FROM visitors ORDER BY visit_time DESC LIMIT $limit";
+        $stmt = $this->runQuery($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+	
+	public function getGeoInfo($ip) {
+		session_start(); // Ensure that sessions are started
+
+		// If we already have a cached result for this IP, return it
+		if (isset($_SESSION['geo_cache'][$ip])) {
+			return $_SESSION['geo_cache'][$ip];
+		}
+
+		// Validate the IP address
+		if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+			return ['country' => 'Invalid IP', 'city' => 'Invalid IP'];
+		}
+
+		$url = "http://ip-api.com/json/{$ip}?fields=status,country,city";
+		$response = @file_get_contents($url);
+		
+		if ($response) {
+			$data = json_decode($response, true);
+			if ($data['status'] === 'success') {
+				$_SESSION['geo_cache'][$ip] = [  // Store in session cache
+					'country' => $data['country'] ?? 'Unknown',
+					'city' => $data['city'] ?? 'Unknown'
+				];
+				return $_SESSION['geo_cache'][$ip];
+			}
+		}
+
+		return ['country' => 'Unknown', 'city' => 'Unknown'];
+	}
+public function getOSStats() {
+    $stmt = $this->runQuery("SELECT user_agent FROM visitors");
+    $osCounts = [
+        "Windows" => 0, 
+        "MacOS" => 0, 
+        "Linux" => 0, 
+        "Android" => 0, 
+        "iOS" => 0, 
+        "Other" => 0
+    ];
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $ua = strtolower($row['user_agent']);
+        if (strpos($ua, 'windows') !== false) {
+            $osCounts["Windows"]++;
+        } elseif (strpos($ua, 'macintosh') !== false || strpos($ua, 'mac os') !== false) {
+            $osCounts["MacOS"]++;
+        } elseif (strpos($ua, 'linux') !== false && strpos($ua, 'android') === false) {
+            $osCounts["Linux"]++;
+        } elseif (strpos($ua, 'android') !== false) {
+            $osCounts["Android"]++;
+        } elseif (strpos($ua, 'iphone') !== false || strpos($ua, 'ipad') !== false || strpos($ua, 'ios') !== false) {
+            $osCounts["iOS"]++;
+        } else {
+            $osCounts["Other"]++;
+        }
+    }
+
+    return json_encode($osCounts);
+}
+public function getHourlyTraffic() {
+    $stmt = $this->runQuery("
+        SELECT HOUR(visit_time) as hour, COUNT(*) as visits 
+        FROM visitors 
+        WHERE DATE(visit_time) = CURDATE() 
+        GROUP BY hour 
+        ORDER BY hour
+    ");
+    
+    $data = array_fill(0, 24, 0); // Initialize array with 24 hours
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $data[$row['hour']] = $row['visits'];
+    }
+
+    return json_encode($data); // Return as JSON
+}
+
 }
 ?>
