@@ -71,6 +71,7 @@ include('template/header.php');
         <button type="button" onclick="formatText('list')">List</button>
         <button type="button" onclick="formatText('quote')">Quote</button>
         <button type="button" onclick="openFileUpload()">Upload Image</button>
+		<button type="button" onclick="insertYouTube()">YouTube</button>
     </div>
     
     <textarea name="topic_desc" id="topic_desc" rows="20" cols="102" required><?= htmlspecialchars($topic['topic_desc']) ?></textarea>
@@ -185,6 +186,17 @@ function uploadImage() {
         });
     } else {
         alert('Please select an image to upload.');
+    }
+}
+
+function insertYouTube() {
+    const videoId = prompt("Enter YouTube Video ID (e.g., zBI0v2vOEaY):");
+    if (videoId) {
+        const textarea = document.getElementById('topic_desc');
+        const start = textarea.selectionStart;
+        const youtubeEmbed = `[![Watch the video](https://img.youtube.com/vi/${videoId}/maxresdefault.jpg)](https://www.youtube.com/watch?v=${videoId})`;
+        textarea.value = textarea.value.substring(0, start) + youtubeEmbed + textarea.value.substring(start);
+        textarea.focus();
     }
 }
 </script>
