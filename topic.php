@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <!-- PROFILE PART END -->
 
-    <p><?= $parsedown->text($topic['topic_desc']) ?></p>
+    <?= $parsedown->text($topic['topic_desc']) ?>
 </div>
 
 <?php if ($isUserOrAdmin): ?>
@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         </div>
 
-        <p><?= $parsedown->text($comment['comment']) ?></p>
+        <?= $parsedown->text($comment['comment']) ?>
     </div>
 <?php endforeach; ?>
 

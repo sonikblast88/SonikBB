@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="<?php echo WEBSITE_DESC; ?>">
 	<meta name="keywords" content="<?= isset($GLOBALS['keywords']) ? htmlspecialchars(trim($GLOBALS['keywords'])) : 'forum, php, discussion, sonikbb.eu' ?>">
+	<!-- highlighting code -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+	<script>hljs.highlightAll();</script>
 </head>
 <body>
 <div id="container">

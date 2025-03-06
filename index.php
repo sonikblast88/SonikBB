@@ -110,9 +110,9 @@ $categories = $categoryModel->listCategories();
                 <?php if ($is_admin): ?>
                     <?php
                     $edit = '<a href="index.php?edit_category=' . htmlspecialchars($category->cat_id) . '">[ Edit ]</a> ';
-                    $delete = '<a href="index.php?delete=' . htmlspecialchars($category->cat_id) . '" onclick="return confirm(\'Are you sure?\')">[ Delete ]</a> ';
-                    $moveup = '<a href="index.php?action=move_up&cat_id=' . htmlspecialchars($category->cat_id) . '">[ ↑ ]</a> ';
-                    $movedown = '<a href="index.php?action=move_down&cat_id=' . htmlspecialchars($category->cat_id) . '">[ ↓ ]</a>';
+                    $delete = '<a href="index.php?delete=' . htmlspecialchars($category->cat_id) . '" class="text-danger" onclick="return confirm(\'Are you sure?\')">[ Delete ]</a> ';
+                    $moveup = '<a href="index.php?action=move_up&cat_id=' . htmlspecialchars($category->cat_id) . '" class="text-success">[ ↑ ]</a> ';
+                    $movedown = '<a href="index.php?action=move_down&cat_id=' . htmlspecialchars($category->cat_id) . '" class="text-success">[ ↓ ]</a>';
                     echo $edit . $delete . $moveup . $movedown;
                     ?>
                 <?php endif; ?>

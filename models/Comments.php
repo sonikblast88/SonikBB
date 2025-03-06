@@ -6,7 +6,7 @@ class Comments {
 
     public function __construct($db) {
         $this->conn = $db;
-        $this->parsedown = new Parsedown(); // Initialize Parsedown for Markdown processing
+        // Parsedown removed – Markdown processing is not performed here anymore.
     }
 
     // Method to retrieve comments for a given topic
@@ -26,11 +26,7 @@ class Comments {
         // Fetch results
         $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Render Markdown for each comment
-        foreach ($comments as &$comment) {
-            $comment['comment'] = $this->parsedown->text($comment['comment']);
-        }
-
+        // Removed Markdown rendering via Parsedown
         return $comments;
     }
 

@@ -97,7 +97,7 @@ if (stripos(PHP_OS, 'WIN') !== false) {
 <hr style="border: 0px; border-top: dotted 1px;">
 <center>
     [ <a href="https://sonikbb.eu" style="color: #000; font-weight: bold;">SonikBB</a> ] 
-    [ <span style="color: #000; font-weight: bold;">Version 1.0.11</span> ] 
+    [ <span style="color: #000; font-weight: bold;">Version 1.0.12</span> ] 
     [ <a href="https://sonikbb.eu/topic.php?topic_id=30" style="color: #000; font-weight: bold;">Copyrights</a> ]
     [ <a href="https://sonikbb.eu/sitemap.php" style="color: #000; font-weight: bold;">Sitemap</a> ]
 </center>

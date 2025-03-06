@@ -40,10 +40,11 @@ a:hover {
 #navigation {
     float: left;
     width: 100%;
-    background: #ACA8A1;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    background: #1a1a1a;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border: 0px;
+	border-left: 1px solid black;
 }
 
 #navigation ul {
@@ -61,7 +62,7 @@ a:hover {
     display: block;
     float: left;
     padding: 5px 10px;
-    color: #000000;
+    color: #FFFFFF;
     text-decoration: none;
     border-right: 1px solid #fff;
 }
@@ -108,7 +109,7 @@ a:hover {
 
 #footer {
     clear: left;
-    background: #ccc;
+    background: #F0F0F0;
     text-align: left;
     padding: 20px;
     border: 1px solid black;
@@ -155,6 +156,15 @@ a:hover {
     width: 45px;
     height: 45px;
     object-fit: scale-down;
+}
+
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-success {
+  color: #198754 !important;
 }
 
 /* THE PROFILE PART */
@@ -239,7 +249,7 @@ td {
     text-align: left;
 }
 
-pre {
+/*pre {
     background-color: #f8f8f8;
     padding: 15px;
     border: 1px solid #ddd;
@@ -247,7 +257,7 @@ pre {
     margin: 15px 0;
     overflow-x: auto;
     position: relative;
-}
+}*/
 
 code {
 background-color: #F4CCCC;

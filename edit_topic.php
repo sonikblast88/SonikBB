@@ -29,7 +29,7 @@ $topic = $topicsModel->getTopicById($topic_id);
 
 // Process the edit topic form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $topic_name = htmlspecialchars(strip_tags($_POST['topic_name']));
+    $topic_name = htmlspecialchars($_POST['topic_name']);
     // Allow HTML/Markdown formatting for topic description
     $topic_desc = $_POST['topic_desc'];
 

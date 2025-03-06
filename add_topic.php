@@ -27,7 +27,7 @@ $topicsModel = new Topics($db);
 // Process the form submission for adding a new topic.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parent = $cat_id;
-    $topic_name = htmlspecialchars(strip_tags($_POST['topic_name']));
+    $topic_name = htmlspecialchars($_POST['topic_name']);
     // Allow HTML/Markdown in the topic description.
     $topic_desc = $_POST['topic_desc'];
     // Use the current user's ID as the topic author.
