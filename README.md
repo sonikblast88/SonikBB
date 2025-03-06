@@ -1,6 +1,6 @@
 # SonikBB
 
-![Screenshot 2025-02-21 111732](https://github.com/user-attachments/assets/e7be1900-3b5f-4841-a0c8-ed09cbd6d65c)
+![image](https://github.com/user-attachments/assets/1197d4ca-40f2-44ca-828d-eb58811c3509)
 
 # My main idea is that every new programmer can understand and contribute to the forum or just play and learn new things for himself.
 
